@@ -5,6 +5,7 @@ Definición formal: <em>Cada una de las asignaturas que enseñan en un centro do
 En este ámbito sería algo como una categoría específico de conocimiento, funcionando como unidad organizativa que agrupa contenido relacionado.
 
 El modelo entidad-relación sería de la siguiente forma en la estructura:
+<br>
 ![](out/Dani/relacionAsign-UD/AUD.png)
 ### Unidad didáctica
 Definición formal: <em>Es la planificación de lsa actividades de aprendizaje en relación con el resto de elementos de la programación docente.</em>
@@ -42,6 +43,7 @@ Logros hablados:
 Como extras de la aplicación se había contemplado lo siguiente:
 
 * Modo historia. En la que se desarrolla una historia y el usuario tiene la capacidad de interactuar directamente sobre ella, con una estructura similar a:
+<br>
 ![](out/Dani/modoHistoria/Historia.png)
 <br>
 
