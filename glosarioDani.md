@@ -44,7 +44,9 @@ Como extras de la aplicación se había contemplado lo siguiente:
 
 * Modo historia. En la que se desarrolla una historia y el usuario tiene la capacidad de interactuar directamente sobre ella, con una estructura similar a:
 <br>
+
 ![](out/Dani/modoHistoria/Historia.png)
+
 <br>
 
 * Resumen de la cuenta. Un esquema de la cuenta, mostrando gráficamente los distintos avances en las distintas asignaturas/unidades didácticas/tema.
