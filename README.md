@@ -1,1 +1,1 @@
-[Glosario Dani](glosarioDani.md)
+Jean Monnet serious game
