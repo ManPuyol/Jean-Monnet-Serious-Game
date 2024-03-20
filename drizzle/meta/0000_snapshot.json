@@ -1,69 +1,58 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
+  "id": "a58c2e5c-a084-4627-b85c-331636e06c7d",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
-  "tables": {},
+  "tables": {
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
   "enums": {
-    "key_status": {
-      "name": "key_status",
+    "role": {
+      "name": "role",
       "values": {
-        "expired": "expired",
-        "invalid": "invalid",
-        "valid": "valid",
-        "default": "default"
-      }
-    },
-    "key_type": {
-      "name": "key_type",
-      "values": {
-        "stream_xchacha20": "stream_xchacha20",
-        "secretstream": "secretstream",
-        "secretbox": "secretbox",
-        "kdf": "kdf",
-        "generichash": "generichash",
-        "shorthash": "shorthash",
-        "auth": "auth",
-        "hmacsha256": "hmacsha256",
-        "hmacsha512": "hmacsha512",
-        "aead-det": "aead-det",
-        "aead-ietf": "aead-ietf"
-      }
-    },
-    "factor_status": {
-      "name": "factor_status",
-      "values": {
-        "verified": "verified",
-        "unverified": "unverified"
-      }
-    },
-    "factor_type": {
-      "name": "factor_type",
-      "values": {
-        "webauthn": "webauthn",
-        "totp": "totp"
-      }
-    },
-    "aal_level": {
-      "name": "aal_level",
-      "values": {
-        "aal3": "aal3",
-        "aal2": "aal2",
-        "aal1": "aal1"
-      }
-    },
-    "code_challenge_method": {
-      "name": "code_challenge_method",
-      "values": {
-        "plain": "plain",
-        "s256": "s256"
+        "teacher": "teacher",
+        "student": "student",
+        "admin": "admin"
       }
     }
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }
