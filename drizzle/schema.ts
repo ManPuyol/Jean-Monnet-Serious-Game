@@ -1,4 +1,4 @@
-import { pgTable } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['expired', 'invalid', 'valid', 'default'])
