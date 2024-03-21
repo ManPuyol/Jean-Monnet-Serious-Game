@@ -8,3 +8,7 @@ export const subjects = pgTable('subjects', {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+
+export type SelectSubject = typeof subjects.$inferSelect;
+export type InsertSubject = typeof subjects.$inferInsert;
