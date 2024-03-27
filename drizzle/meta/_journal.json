@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1710949824990,
-      "tag": "0000_famous_sharon_carter",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1710951813582,
-      "tag": "0001_fuzzy_green_goblin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1710952219817,
-      "tag": "0002_boring_big_bertha",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1710952531431,
-      "tag": "0003_thin_reaper",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1710952766380,
-      "tag": "0004_loving_wiccan",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1711557427936,
-      "tag": "0005_crazy_toro",
+      "when": 1711558327988,
+      "tag": "0000_great_squadron_sinister",
       "breakpoints": true
     }
   ]
