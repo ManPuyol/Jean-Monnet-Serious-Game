@@ -6,9 +6,9 @@ import { subjects } from "./subjects";
 import { answers } from "./answers";
 
 
-export const detailquizzes = pgTable('detailquizzes', {
+export const quizDetails = pgTable('quiz_details', {
     id: serial('id').primaryKey(),
-    quizzId: integer('quizz_id').references(() => quizzes.id),
+    quizId: integer('quiz_id').references(() => quizzes.id),
     userId: integer('user_Id').references(() => users.id),
     questionId: integer('question_id').references(() => questions.id),
     subjectId: integer('subject_id').references(() => subjects.id),
