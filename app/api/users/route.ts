@@ -1,5 +1,5 @@
-import { allUsers } from '@/controllers/users';
-import { NextResponse } from 'next/server';
+import { allUsers, signUp } from '@/controllers/users';
+import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET() {
     try {
@@ -17,3 +17,14 @@ export async function GET() {
       );
     }
   }
+
+export async function POST(req: NextRequest){
+  try {
+    const body = await req.json();
+    return NextResponse.json(signUp(body));
+  } catch (error){
+    console.log(error);
+    return NextResponse.json({});
+  }
+
+}
