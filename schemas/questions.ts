@@ -1,11 +1,12 @@
-import { pgTable, serial, boolean, timestamp, integer } from "drizzle-orm/pg-core";
-import { topics } from "./topics";
+import { pgTable, serial, boolean, timestamp, integer, varchar } from "drizzle-orm/pg-core";
+import { units } from "./units";
 
 export const questions = pgTable('questions', {
   id: serial('id').primaryKey(),
-//   question: ,
+  unitId: integer('unit_id').references(() => units.id),
+  question: varchar('question', { length: 256 }),
+  hard: boolean('hard').default(false),
   active: boolean('active').default(true),
-  subjectId: integer('subject_id').references(() => topics.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

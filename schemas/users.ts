@@ -1,10 +1,10 @@
-import { pgTable, serial, text, varchar, pgEnum, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, pgEnum, timestamp } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum('role', ['teacher', 'student', 'admin']);
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  fullName: text('full_name'),
+  fullName: varchar('fullName', { length: 256 }),
   email: varchar('email', { length: 256 }),
   role: roleEnum('role'),
   createdAt: timestamp("created_at").defaultNow().notNull(),
