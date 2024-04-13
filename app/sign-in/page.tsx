@@ -1,9 +1,6 @@
 "use client"
 import Link from "next/link"
-
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "@/components/submit-button";
+import { LoaderCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -14,46 +11,38 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useFormState } from "react-dom";
+import { FormEvent, useTransition } from "react";
 import { signIn } from "@/controllers/auth";
-import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function Login({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
-  const [errorMessage, send] = useFormState(signIn, undefined);
+  let [isPending, startTransition] = useTransition();
   const { toast } = useToast()
 
-
-  useEffect(() => {
-    if (errorMessage == undefined) return
-
-    const { error } = JSON.parse(errorMessage);
-
-    if (error?.message) {
-      toast({
-        variant: "destructive",
-        title: error.message,
-      });
-    } else {
-      toast({
-        title: "You are successfully register.",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              register complete
-            </code>
-          </pre>
-        ),
-      });
-    }
-    
-  }, [errorMessage])
-  
-
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.target as HTMLFormElement);
+    startTransition(async () => {
+      const result = await signIn(data);
+      const { error } = JSON.parse(result);
+      if (error?.message) {
+        toast({
+          variant: "destructive",
+          title: error.message,
+          description: "Please try again"
+        });
+      } else {
+        toast({
+          title: "You are successfully register."
+        });
+      }
+    });
+  }
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
@@ -65,7 +54,7 @@ export default function Login({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={send} className="grid gap-4">
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -79,16 +68,20 @@ export default function Login({
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link href="#" className="ml-auto inline-block text-sm underline">
+                {/* <Link href="#" className="ml-auto inline-block text-sm underline">
                   Forgot your password?
-                </Link>
+                </Link> */}
               </div>
               <Input id="password" name="password" type="password" required />
             </div>
-            <SubmitButton type="submit" className="w-full">
-              Login
-            </SubmitButton>
-            <Button variant="outline" className="w-full">
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {!isPending ?
+                "Login"
+                :
+                <LoaderCircle className={cn(" animate-spin")} />
+              }
+            </Button>
+            <Button type="button" variant="outline" className="w-full" disabled={isPending}>
               Login with ...
             </Button>
           </form>
@@ -99,7 +92,6 @@ export default function Login({
             </Link>
           </div>
         </CardContent>
-        {errorMessage}
       </Card>
     </div>
   );
