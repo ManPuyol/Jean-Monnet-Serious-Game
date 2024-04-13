@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SubmitButton } from "@/components/submit-button";
+import { NextResponse } from "next/server";
 export default function Login({
   searchParams,
 }: {
@@ -27,13 +28,14 @@ export default function Login({
     const password = formData.get("password") as string;
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signUp({
+    const {error} = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
+      // options: {
+      //   emailRedirectTo: `${origin}/auth/callback`,
+      // },
     });
+    
 
     if (error) {
       console.error(error);
