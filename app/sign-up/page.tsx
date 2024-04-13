@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
@@ -14,36 +16,32 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SubmitButton } from "@/components/submit-button";
 import { NextResponse } from "next/server";
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+import { signUp } from "@/controllers/auth";
+import { FormEvent, useTransition } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { LoaderCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { PasswordInput } from "@/components/password-input";
 
-  const signUp = async (formData: FormData) => {
-    "use server";
+export default function Login(){
+  let [isPending, startTransition] = useTransition();
+  const { toast } = useToast()
 
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
-
-    const {error} = await supabase.auth.signUp({
-      email,
-      password,
-      // options: {
-      //   emailRedirectTo: `${origin}/auth/callback`,
-      // },
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.target as HTMLFormElement);
+    startTransition(async () => {
+      const result = await signUp(data);
+      const { error } = JSON.parse(result);
+      if (error?.message) {
+        toast({
+          variant: "destructive",
+          title: error.message
+        });
+      }
     });
-    
-
-    if (error) {
-      console.error(error);
-    }
-
-    // return redirect("/login?message=Check email to continue sign in process");
-  };
-
+  }
+  
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Card className="animate-in mx-auto max-w-sm">
@@ -54,15 +52,23 @@ export default function Login({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4">
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" placeholder="Max" required />
+                <Input 
+                  id="first-name" 
+                  name="first-name"
+                  placeholder="Max" 
+                  required />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" placeholder="Robinson" required />
+                <Input 
+                  id="last-name" 
+                  name="last-name"
+                  placeholder="Robinson" 
+                  required />
               </div>
             </div>
             <div className="grid gap-2">
@@ -77,12 +83,24 @@ export default function Login({
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" />
+              <PasswordInput
+                id="password" name="password" required
+                autoComplete="new-password"
+              />
             </div>
-            <SubmitButton
-              formAction={signUp} type="submit" className="w-full">
-              Create an account
-            </SubmitButton>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Confirm password</Label>
+              <PasswordInput
+                id="confirm-password" name="confirm-password" required
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {!isPending ?
+                "Create account"
+                :
+                <LoaderCircle className={cn(" animate-spin")} />
+              }
+            </Button>
             <Button variant="outline" className="w-full">
               Sign up with ...
             </Button>
