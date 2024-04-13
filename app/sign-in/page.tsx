@@ -17,11 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { PasswordInput } from "@/components/password-input";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default function Login() {
   let [isPending, startTransition] = useTransition();
   const { toast } = useToast()
 
@@ -36,10 +32,6 @@ export default function Login({
           variant: "destructive",
           title: error.message,
           description: "Please try again"
-        });
-      } else {
-        toast({
-          title: "You are successfully register."
         });
       }
     });
@@ -74,7 +66,7 @@ export default function Login({
                 </Link> */}
               </div>
               <PasswordInput
-                id="password" name="password" type="password" required
+                id="password" name="password" required
                 autoComplete="new-password"
               />
             </div>
