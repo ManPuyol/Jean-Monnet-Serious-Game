@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, EyeIcon, EyeOffIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -15,6 +15,7 @@ import { FormEvent, useTransition } from "react";
 import { signIn } from "@/controllers/auth";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { PasswordInput } from "@/components/password-input";
 
 export default function Login({
   searchParams,
@@ -72,7 +73,10 @@ export default function Login({
                   Forgot your password?
                 </Link> */}
               </div>
-              <Input id="password" name="password" type="password" required />
+              <PasswordInput
+                id="password" name="password" type="password" required
+                autoComplete="new-password"
+              />
             </div>
             <Button type="submit" className="w-full" disabled={isPending}>
               {!isPending ?
@@ -81,9 +85,9 @@ export default function Login({
                 <LoaderCircle className={cn(" animate-spin")} />
               }
             </Button>
-            <Button type="button" variant="outline" className="w-full" disabled={isPending}>
+            {/* <Button type="button" variant="outline" className="w-full" disabled={isPending}>
               Login with ...
-            </Button>
+            </Button> */}
           </form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
