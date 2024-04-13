@@ -1,6 +1,6 @@
 {
-  "id": "35ea2fe7-d187-4d35-86d3-c4ed4b73f14b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -46,69 +46,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "answers": {
-      "name": "answers",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "question_id": {
-          "name": "question_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "correct": {
-          "name": "correct",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "answers_question_id_questions_id_fk": {
-          "name": "answers_question_id_questions_id_fk",
-          "tableFrom": "answers",
-          "tableTo": "questions",
-          "columnsFrom": [
-            "question_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "languages": {
       "name": "languages",
       "schema": "",
@@ -131,76 +68,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "questions": {
-      "name": "questions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "unit_id": {
-          "name": "unit_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "question": {
-          "name": "question",
-          "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "hard": {
-          "name": "hard",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "questions_unit_id_units_id_fk": {
-          "name": "questions_unit_id_units_id_fk",
-          "tableFrom": "questions",
-          "tableTo": "units",
-          "columnsFrom": [
-            "unit_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "quiz_details": {
       "name": "quiz_details",
       "schema": "",
@@ -219,7 +86,7 @@
         },
         "user_Id": {
           "name": "user_Id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -265,25 +132,13 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quiz_details_quiz_id_quizzes_id_fk": {
-          "name": "quiz_details_quiz_id_quizzes_id_fk",
+        "quiz_details_answer_id_answers_id_fk": {
+          "name": "quiz_details_answer_id_answers_id_fk",
           "tableFrom": "quiz_details",
-          "tableTo": "quizzes",
+          "tableTo": "answers",
+          "schemaTo": "public",
           "columnsFrom": [
-            "quiz_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "quiz_details_user_Id_users_id_fk": {
-          "name": "quiz_details_user_Id_users_id_fk",
-          "tableFrom": "quiz_details",
-          "tableTo": "users",
-          "columnsFrom": [
-            "user_Id"
+            "answer_id"
           ],
           "columnsTo": [
             "id"
@@ -295,8 +150,23 @@
           "name": "quiz_details_question_id_questions_id_fk",
           "tableFrom": "quiz_details",
           "tableTo": "questions",
+          "schemaTo": "public",
           "columnsFrom": [
             "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "quiz_details_quiz_id_quizzes_id_fk": {
+          "name": "quiz_details_quiz_id_quizzes_id_fk",
+          "tableFrom": "quiz_details",
+          "tableTo": "quizzes",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "quiz_id"
           ],
           "columnsTo": [
             "id"
@@ -308,6 +178,7 @@
           "name": "quiz_details_subject_id_subjects_id_fk",
           "tableFrom": "quiz_details",
           "tableTo": "subjects",
+          "schemaTo": "public",
           "columnsFrom": [
             "subject_id"
           ],
@@ -317,15 +188,16 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "quiz_details_answer_id_answers_id_fk": {
-          "name": "quiz_details_answer_id_answers_id_fk",
+        "quiz_details_user_Id_users_auth_id_fk": {
+          "name": "quiz_details_user_Id_users_auth_id_fk",
           "tableFrom": "quiz_details",
-          "tableTo": "answers",
+          "tableTo": "users",
+          "schemaTo": "public",
           "columnsFrom": [
-            "answer_id"
+            "user_Id"
           ],
           "columnsTo": [
-            "id"
+            "auth_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -346,7 +218,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -379,15 +251,16 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "quizzes_user_id_users_id_fk": {
-          "name": "quizzes_user_id_users_id_fk",
+        "quizzes_user_id_users_auth_id_fk": {
+          "name": "quizzes_user_id_users_auth_id_fk",
           "tableFrom": "quizzes",
           "tableTo": "users",
+          "schemaTo": "public",
           "columnsFrom": [
             "user_id"
           ],
           "columnsTo": [
-            "id"
+            "auth_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -502,6 +375,7 @@
           "name": "units_subject_id_subjects_id_fk",
           "tableFrom": "units",
           "tableTo": "subjects",
+          "schemaTo": "public",
           "columnsFrom": [
             "subject_id"
           ],
@@ -519,11 +393,11 @@
       "name": "users",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
+        "auth_id": {
+          "name": "auth_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "fullName": {
           "name": "fullName",
@@ -541,7 +415,86 @@
           "name": "role",
           "type": "role",
           "primaryKey": false,
+          "notNull": false,
+          "default": "'student'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
           "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "public_users_auth_id_fkey": {
+          "name": "public_users_auth_id_fkey",
+          "tableFrom": "users",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "auth_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_auth_id_unique": {
+          "columns": [
+            "auth_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "users_auth_id_unique"
+        }
+      }
+    },
+    "questions": {
+      "name": "questions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "unit_id": {
+          "name": "unit_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "question": {
+          "name": "question",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hard": {
+          "name": "hard",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
         },
         "created_at": {
           "name": "created_at",
@@ -559,12 +512,218 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "questions_unit_id_units_id_fk": {
+          "name": "questions_unit_id_units_id_fk",
+          "tableFrom": "questions",
+          "tableTo": "units",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "unit_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "answers": {
+      "name": "answers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "question_id": {
+          "name": "question_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "correct": {
+          "name": "correct",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "answers_question_id_questions_id_fk": {
+          "name": "answers_question_id_questions_id_fk",
+          "tableFrom": "answers",
+          "tableTo": "questions",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "question_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user_achievement": {
+      "name": "user_achievement",
+      "schema": "",
+      "columns": {
+        "user_Id": {
+          "name": "user_Id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "achievement_id": {
+          "name": "achievement_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_achievement_achievement_id_achievements_id_fk": {
+          "name": "user_achievement_achievement_id_achievements_id_fk",
+          "tableFrom": "user_achievement",
+          "tableTo": "achievements",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "achievement_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_achievement_user_Id_users_auth_id_fk": {
+          "name": "user_achievement_user_Id_users_auth_id_fk",
+          "tableFrom": "user_achievement",
+          "tableTo": "users",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "user_Id"
+          ],
+          "columnsTo": [
+            "auth_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "user_achievement_user_Id_achievement_id_pk": {
+          "name": "user_achievement_user_Id_achievement_id_pk",
+          "columns": [
+            "user_Id",
+            "achievement_id"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },
   "enums": {
+    "key_status": {
+      "name": "key_status",
+      "values": {
+        "default": "default",
+        "valid": "valid",
+        "invalid": "invalid",
+        "expired": "expired"
+      }
+    },
+    "key_type": {
+      "name": "key_type",
+      "values": {
+        "aead-ietf": "aead-ietf",
+        "aead-det": "aead-det",
+        "hmacsha512": "hmacsha512",
+        "hmacsha256": "hmacsha256",
+        "auth": "auth",
+        "shorthash": "shorthash",
+        "generichash": "generichash",
+        "kdf": "kdf",
+        "secretbox": "secretbox",
+        "secretstream": "secretstream",
+        "stream_xchacha20": "stream_xchacha20"
+      }
+    },
+    "factor_type": {
+      "name": "factor_type",
+      "values": {
+        "totp": "totp",
+        "webauthn": "webauthn"
+      }
+    },
+    "factor_status": {
+      "name": "factor_status",
+      "values": {
+        "unverified": "unverified",
+        "verified": "verified"
+      }
+    },
+    "aal_level": {
+      "name": "aal_level",
+      "values": {
+        "aal1": "aal1",
+        "aal2": "aal2",
+        "aal3": "aal3"
+      }
+    },
+    "code_challenge_method": {
+      "name": "code_challenge_method",
+      "values": {
+        "s256": "s256",
+        "plain": "plain"
+      }
+    },
     "role": {
       "name": "role",
       "values": {
@@ -572,12 +731,34 @@
         "student": "student",
         "admin": "admin"
       }
+    },
+    "equality_op": {
+      "name": "equality_op",
+      "values": {
+        "eq": "eq",
+        "neq": "neq",
+        "lt": "lt",
+        "lte": "lte",
+        "gt": "gt",
+        "gte": "gte",
+        "in": "in"
+      }
+    },
+    "action": {
+      "name": "action",
+      "values": {
+        "INSERT": "INSERT",
+        "UPDATE": "UPDATE",
+        "DELETE": "DELETE",
+        "TRUNCATE": "TRUNCATE",
+        "ERROR": "ERROR"
+      }
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
   }
 }
