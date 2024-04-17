@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export const addSubject = async (subject: InsertSubject) => {
   await db.insert(subjects).values(subject);
-  revalidatePath("/");
+  // revalidatePath("/");
 };
 
 export const allSubjects = async () => {
@@ -19,13 +19,14 @@ export const deleteSubject = async (id: number) => {
   //revalidatePath("/");
 };
 
-// export const editTodo = async (id: number, text: string) => {
-//   await db
-//     .update(subjects)
-//     .set({
-//       text: text,
-//     })
-//     .where(eq(subjects.id, id));
+export const updateSubject = async (id: number, subject: InsertSubject) => {
+  await db
+    .update(subjects)
+    .set({
+      ...subject,
+      updatedAt: new Date(),
+    })
+    .where(eq(subjects.id, id));
 
-//   revalidatePath("/");
-// };
+  // revalidatePath("/");
+};
