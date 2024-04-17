@@ -1,15 +1,11 @@
-import { pgTable, serial, varchar, pgEnum, timestamp, uuid, foreignKey } from "drizzle-orm/pg-core";
-
-export const role = pgEnum('role', ['teacher', 'student', 'admin']);
+import { pgTable, varchar, timestamp, foreignKey, uuid, unique } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-	id: uuid("auth_id").unique().primaryKey().notNull(),
-	fullName: varchar("fullName", { length: 256 }),
+	id: uuid("id").primaryKey().notNull(),
+	fullName: varchar("full_name", { length: 256 }),
 	email: varchar("email", { length: 256 }),
-	role: role("role").default('student'),
 	createdAt: timestamp("created_at", { mode: 'string' }),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-	authId: uuid("auth_id"),
 },
 (table) => {
 	return {
@@ -18,6 +14,6 @@ export const users = pgTable("users", {
 			foreignColumns: [table.id],
 			name: "public_users_auth_id_fkey"
 		}),
+		usersAuthIdUnique: unique("users_auth_id_unique").on(table.id),
 	}
 });
-
