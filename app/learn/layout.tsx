@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Bell,
+  Plus,
   CircleUser,
   Home,
   LineChart,
@@ -39,17 +40,26 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
-              <Package2 className="h-6 w-6" />
-              <span className="">Acme Inc</span>
+            <Link href="#" className="flex items-center gap-2 font-semibold">
+              {/* <Package2 className="h-6 w-6" /> */}
+              <span className="">Jean Monnet</span>
             </Link>
-            {/* <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
+            <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
               <Bell className="h-4 w-4" />
               <span className="sr-only">Toggle notifications</span>
-            </Button> */}
+            </Button>
           </div>
           <div className="flex-1">
-            {/* <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+            <div className=" flex px-4 justify-between">
+              <span className="font-semibold ">
+              Subjects
+              </span>
+              <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
+              <Plus className="h-4 w-4" />
+              <span className="sr-only">Toggle notifications</span>
+            </Button>
+            </div>
+             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -88,12 +98,12 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 <LineChart className="h-4 w-4" />
                 Analytics
               </Link>
-            </nav> */}
+            </nav> 
           </div>
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <header className="flex end justify-between md:justify-end h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -112,13 +122,13 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
                   <Package2 className="h-6 w-6" />
-                  My Subjects
+                  Subjects
                 </Link>
                 
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="w-full flex-1">
+          {/* <div className="w-full flex-1">
             <form>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -129,7 +139,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 />
               </div>
             </form>
-          </div>
+          </div> */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
@@ -138,10 +148,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
+              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator /> */}
+              <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
