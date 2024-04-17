@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, serial, varchar, timestamp, foreignKey, integer, uuid, boolean, smallint, unique, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, pgEnum, integer, uuid, serial, varchar, timestamp, boolean, smallint, unique, primaryKey } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
@@ -11,6 +11,11 @@ export const role = pgEnum("role", ['teacher', 'student', 'admin'])
 export const equalityOp = pgEnum("equality_op", ['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'in'])
 export const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'])
 
+
+export const students = pgTable("students", {
+	id: integer("id").primaryKey().notNull(),
+	userId: uuid("user_id").notNull().references(() => users.id),
+});
 
 export const achievements = pgTable("achievements", {
 	id: serial("id").primaryKey().notNull(),
@@ -28,18 +33,16 @@ export const languages = pgTable("languages", {
 export const quizDetails = pgTable("quiz_details", {
 	id: serial("id").primaryKey().notNull(),
 	quizId: integer("quiz_id").references(() => quizzes.id),
-	userId: uuid("user_Id").references(() => users.authId),
+	userId: uuid("user_Id").references(() => users.id),
 	questionId: integer("question_id").references(() => questions.id),
 	subjectId: integer("subject_id").references(() => subjects.id),
-	answerId: integer("answer_id").references(() => answers.id),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
 export const quizzes = pgTable("quizzes", {
 	id: serial("id").primaryKey().notNull(),
-	userId: uuid("user_id").references(() => users.authId),
+	userId: uuid("user_id").references(() => users.id),
 	score: smallint("score").notNull(),
 	meta: varchar("meta", { length: 256 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
@@ -65,25 +68,6 @@ export const units = pgTable("units", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
-export const users = pgTable("users", {
-	authId: uuid("auth_id"),
-	fullName: varchar("fullName", { length: 256 }),
-	email: varchar("email", { length: 256 }),
-	role: role("role").default('student'),
-	createdAt: timestamp("created_at", { mode: 'string' }),
-	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-},
-(table) => {
-	return {
-		publicUsersAuthIdFkey: foreignKey({
-			columns: [table.authId],
-			foreignColumns: [table.id],
-			name: "public_users_auth_id_fkey"
-		}),
-		usersAuthIdUnique: unique("users_auth_id_unique").on(table.authId),
-	}
-});
-
 export const questions = pgTable("questions", {
 	id: serial("id").primaryKey().notNull(),
 	unitId: integer("unit_id").references(() => units.id),
@@ -103,14 +87,47 @@ export const answers = pgTable("answers", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
-export const userAchievement = pgTable("user_achievement", {
-	userId: uuid("user_Id").notNull().references(() => users.authId),
-	achievementId: integer("achievement_id").notNull().references(() => achievements.id),
-	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+export const users = pgTable("users", {
+	id: uuid("id").primaryKey().notNull(),
+	fullName: varchar("full_name", { length: 256 }),
+	email: varchar("email", { length: 256 }),
+	createdAt: timestamp("created_at", { mode: 'string' }),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 },
 (table) => {
 	return {
+		publicUsersAuthIdFkey: foreignKey({
+			columns: [table.id],
+			foreignColumns: [table.id],
+			name: "public_users_auth_id_fkey"
+		}),
+		usersAuthIdUnique: unique("users_auth_id_unique").on(table.id),
+	}
+});
+
+export const teachers = pgTable("teachers", {
+	id: integer("id").primaryKey().notNull(),
+	userId: uuid("user_id").notNull().references(() => users.id),
+});
+
+export const userAchievement = pgTable("user_achievement", {
+	userId: uuid("user_Id").notNull().references(() => users.id),
+	achievementId: integer("achievement_id").notNull().references(() => achievements.id),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+},
+(table) => {
+	return {
 		userAchievementUserIdAchievementIdPk: primaryKey({ columns: [table.userId, table.achievementId], name: "user_achievement_user_Id_achievement_id_pk"})
+	}
+});
+
+export const userSubjects = pgTable("user_subjects", {
+	userId: uuid("user_id").defaultRandom().notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+},
+(table) => {
+	return {
+		userSubjectsPkey: primaryKey({ columns: [table.userId, table.subjectId], name: "user_subjects_pkey"})
 	}
 });
