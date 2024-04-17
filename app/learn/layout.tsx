@@ -40,14 +40,14 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="#" className="flex items-center gap-2 font-semibold">
-              {/* <Package2 className="h-6 w-6" /> */}
+            {/* <Link href="#" className="flex items-center gap-2 font-semibold">
+              <Package2 className="h-6 w-6" />
               <span className="">Jean Monnet</span>
             </Link>
             <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
               <Bell className="h-4 w-4" />
               <span className="sr-only">Toggle notifications</span>
-            </Button>
+            </Button> */}
           </div>
           <div className="flex-1">
             <div className=" flex px-4 justify-between">
@@ -59,44 +59,37 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <span className="sr-only">Toggle notifications</span>
             </Button>
             </div>
-             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+             <nav className="grid items-start px-2 text-sm font-medium lg:px-4 ">
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className="flex-none items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary truncate"
               >
-                <Home className="h-4 w-4" />
-                Dashboard
+                Política de Telecomunicaciones en la UE y Sociedad de la Información
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className="flex-none items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary truncate"
               >
-                <ShoppingCart className="h-4 w-4" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
+                Orders Lorem ipsum dolor sit amet consectetur adipisicing elit. At reiciendis expedita esse ratione cupiditate modi optio aliquam quaerat magni omnis? Aperiam voluptatibus molestias totam minima exercitationem vero sunt non dolor tenetur. Culpa reprehenderit quam aperiam, voluptatibus ea tenetur maxime omnis corrupti quia fugit, eaque sunt. Rem magnam soluta laboriosam quidem.
+  
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
+                className="flex-none items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary truncate"
               >
-                <Package className="h-4 w-4" />
-                Products{" "}
+                Products Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, neque? Sit, nam? Cupiditate doloremque eius saepe sit rerum assumenda aperiam ratione, maiores at odit tenetur earum officia reprehenderit, delectus odio maxime a perferendis magni nemo adipisci necessitatibus. Iure, eligendi laboriosam!
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className="flex-none items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary truncate"
               >
-                <Users className="h-4 w-4" />
-                Customers
+                Customers Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus veniam quis qui asperiores expedita odit?
               </Link>
               <Link
                 href="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className="flex-none items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary truncate"
               >
-                <LineChart className="h-4 w-4" />
-                Analytics
+                Analytics Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda veritatis, nemo ea illum asperiores corporis qui sunt debitis saepe molestiae natus autem iusto accusantium commodi voluptates exercitationem explicabo! Ipsum, eveniet!
               </Link>
             </nav> 
           </div>
