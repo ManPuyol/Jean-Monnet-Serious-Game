@@ -10,5 +10,5 @@ export const subjects = pgTable("subjects", {
 });
 
 
-export type SelectSubject = typeof subjects.$inferSelect;
+export type Subject = typeof subjects.$inferSelect;
 export type InsertSubject = typeof subjects.$inferInsert;
