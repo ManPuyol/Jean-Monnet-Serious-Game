@@ -37,12 +37,13 @@ const LearnPage = async () => {
   return (
     <div className="flex flex-row-reverse gap-[48px] p-6 ">
       <StickyWrapper>
-        <Quests points={userProgress.points} />
+        <div></div>
+        {/* <Quests points={userProgress.points} /> */}
       </StickyWrapper>
       <FeedWrapper>
         {/* <Header title="aaaaa" /> */}
         <div>
-          <CardsChat />
+          {/* <CardsChat /> */}
         </div>
         {/* <Unit
           id={1}
