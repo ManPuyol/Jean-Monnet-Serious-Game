@@ -1,6 +1,6 @@
-import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
-export const languages = pgTable('languages', {
-  id: serial('id').primaryKey(),
-  language: varchar('language', { length: 256 }).notNull(),
+export const languages = pgTable("languages", {
+	id: serial("id").primaryKey().notNull(),
+	language: varchar("language", { length: 256 }).notNull(),
 });
