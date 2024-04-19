@@ -14,7 +14,7 @@ export async function DELETE(req: NextRequest, {params}:{ params: { id: number }
           status: 200,
         }
       );
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       return NextResponse.json(
         {
@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest, {params}:{ params: { id: number } })
         status: 200,
       }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     return NextResponse.json(
       {

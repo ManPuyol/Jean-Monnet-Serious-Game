@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const results = allSubjects()
     return NextResponse.json(results);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
     return NextResponse.json(
       {
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         status: 201,
       }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     return NextResponse.json(
       {

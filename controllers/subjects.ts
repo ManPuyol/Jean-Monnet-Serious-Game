@@ -24,7 +24,7 @@ export const updateSubject = async (id: number, subject: InsertSubject) => {
     .update(subjects)
     .set({
       ...subject,
-      updatedAt: new Date(),
+      updatedAt: new Date().toDateString(),
     })
     .where(eq(subjects.id, id));
 

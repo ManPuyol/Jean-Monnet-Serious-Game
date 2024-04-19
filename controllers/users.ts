@@ -9,7 +9,7 @@ export const allUsers = async () => {
 };
 
 
-export const signUp = async (body) => {
+export const signUp = async (body: { email: any; password: any; data: any; }) => {
 
   const supabase = createClient();
 
