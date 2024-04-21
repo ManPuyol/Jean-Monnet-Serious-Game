@@ -10,3 +10,6 @@ export const units = pgTable('units', {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export type SelectUnit = typeof units.$inferSelect;
+export type InsertUnit = typeof units.$inferInsert;
