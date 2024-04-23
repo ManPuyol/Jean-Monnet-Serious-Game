@@ -18,11 +18,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid max-h-screen overflow-clip w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden md:block">
         <div className="flex h-full max-h-screen flex-col">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6"></div>
-          <div  className="flex-1 border-r pt-2">
+          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+            Jean Monnet
+          </div>
+          <div className="flex-1 border-r pt-2">
             <SidebarSubjects />
           </div>
         </div>
@@ -42,7 +44,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
               <SidebarSubjects />
-
             </SheetContent>
           </Sheet>
           <div className="flex gap-4">
@@ -68,7 +69,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             </DropdownMenu>
           </div>
         </header>
+        <ScrollArea className='h-[calc(100vh-60px)]'>
         {children}
+        </ScrollArea>
+
       </div>
     </div>
   );

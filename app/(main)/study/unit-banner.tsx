@@ -22,7 +22,7 @@ export const UnitBanner = ({
           {description}
         </p>
       </div>
-      <Link href="/lesson">
+      {/* <Link href="/lesson">
         <Button
           size="lg"
           variant="secondary"
@@ -31,7 +31,7 @@ export const UnitBanner = ({
           <NotebookText className="mr-2" />
           Continue
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 };

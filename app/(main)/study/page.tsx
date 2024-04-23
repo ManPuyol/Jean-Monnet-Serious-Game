@@ -39,24 +39,68 @@ const LearnPage = async () => {
       <StickyWrapper>
         <Quests points={userProgress.points} />
       </StickyWrapper>
-      <FeedWrapper>
-        {/* <Header title="aaaaa" /> */}
-        <Unit
-          id={1}
-          order={1}
-          description={'desc'}
-          title="Unit 1"
-          lessons={null}
-          activeLesson={
-            courseProgress.activeLesson as
-              | (any & {
-                  unit: any;
-                })
-              | undefined
-          }
-          activeLessonPercentage={lessonPercentage}
-        />
-      </FeedWrapper>
+        <FeedWrapper>
+          <Unit
+            id={1}
+            order={1}
+            description={'desc'}
+            title="Unit 1"
+            lessons={null}
+            activeLesson={
+              courseProgress.activeLesson as
+                | (any & {
+                    unit: any;
+                  })
+                | undefined
+            }
+            activeLessonPercentage={lessonPercentage}
+          />
+          <Unit
+            id={1}
+            order={1}
+            description={'desc'}
+            title="Unit 1"
+            lessons={null}
+            activeLesson={
+              courseProgress.activeLesson as
+                | (any & {
+                    unit: any;
+                  })
+                | undefined
+            }
+            activeLessonPercentage={lessonPercentage}
+          />
+          <Unit
+            id={1}
+            order={1}
+            description={'desc'}
+            title="Unit 1"
+            lessons={null}
+            activeLesson={
+              courseProgress.activeLesson as
+                | (any & {
+                    unit: any;
+                  })
+                | undefined
+            }
+            activeLessonPercentage={lessonPercentage}
+          />
+          <Unit
+            id={1}
+            order={1}
+            description={'desc'}
+            title="Unit 1"
+            lessons={null}
+            activeLesson={
+              courseProgress.activeLesson as
+                | (any & {
+                    unit: any;
+                  })
+                | undefined
+            }
+            activeLessonPercentage={lessonPercentage}
+          />
+        </FeedWrapper>
     </div>
   );
 };
