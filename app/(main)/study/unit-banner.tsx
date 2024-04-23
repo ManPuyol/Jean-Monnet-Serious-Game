@@ -13,7 +13,7 @@ export const UnitBanner = ({
   description,
 }: Props) => {
   return (
-    <div className="w-full rounded-xl bg-green-500 p-5 text-white flex items-center justify-between">
+    <div className="w-full rounded-xl bg-primary p-5 text-white flex items-center justify-between">
       <div className="space-y-2.5">
         <h3 className="text-2xl font-bold">
           {title}
@@ -22,7 +22,7 @@ export const UnitBanner = ({
           {description}
         </p>
       </div>
-      <Link href="/lesson">
+      {/* <Link href="/lesson">
         <Button
           size="lg"
           variant="secondary"
@@ -31,7 +31,7 @@ export const UnitBanner = ({
           <NotebookText className="mr-2" />
           Continue
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 };
