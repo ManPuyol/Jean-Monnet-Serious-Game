@@ -26,16 +26,16 @@ export const Quests = ({ points }: Props) => {
         </Link>
       </div>
       <ul className="w-full space-y-4">
-        {quests.map((quest) => {
+        {quests.map((quest, index) => {
           const progress = (points / quest.value) * 100;
 
           return (
             <div
               className="flex items-center w-full pb-4 gap-x-3"
-              // key={quest.title}
+              key={quest.title+index}
             >
               <Image
-                src="/points.svg"
+                src=""
                 alt="Points"
                 width={40}
                 height={40}

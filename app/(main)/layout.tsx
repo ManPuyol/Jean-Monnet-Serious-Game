@@ -19,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden  bg-muted/40 md:block">
+      <div className="hidden md:block">
         <div className="flex h-full max-h-screen flex-col">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6"></div>
           <div  className="flex-1 border-r pt-2">
@@ -28,7 +28,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex end justify-between md:justify-end h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+        <header className="flex end justify-between md:justify-end h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button
