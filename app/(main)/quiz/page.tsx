@@ -1,12 +1,6 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/XTKq13CfF6K
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { Progress } from '@/components/ui/progress';
 import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { JSX, SVGProps } from 'react';
 import { Heart } from 'lucide-react';
 
 export default function Component() {
