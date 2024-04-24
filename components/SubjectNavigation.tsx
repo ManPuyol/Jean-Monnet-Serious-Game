@@ -12,6 +12,7 @@ export default function SubjectNavigation({ subjects }: { subjects: Array<Subjec
         {subjects.map((subject, index) => (
           <Button
             key={index}
+            title={subject.name as string}
             variant={activeSubject == index ? 'secondary' : 'ghost'}
             className="justify-start w-full truncate"
             onClick={() => setActiveSubject(index)}
