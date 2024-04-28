@@ -2,11 +2,9 @@
 import { InsertSubject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
 import { eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 
 export const addSubject = async (subject: InsertSubject) => {
   await db.insert(subjects).values(subject);
-  // revalidatePath("/");
 };
 
 export const allSubjects = async () => {
@@ -16,7 +14,6 @@ export const allSubjects = async () => {
 
 export const deleteSubject = async (id: number) => {
   await db.delete(subjects).where(eq(subjects.id, id));
-  //revalidatePath("/");
 };
 
 export const updateSubject = async (id: number, subject: InsertSubject) => {
@@ -27,6 +24,4 @@ export const updateSubject = async (id: number, subject: InsertSubject) => {
       updatedAt: new Date().toDateString(),
     })
     .where(eq(subjects.id, id));
-
-  // revalidatePath("/");
 };
