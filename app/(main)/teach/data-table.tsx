@@ -23,6 +23,7 @@ import {
 
 import { Input } from '@/components/ui/input';
 import { DataTablePagination } from '@/components/ui/DataTablePagination';
+import { DataTableToolbar } from '@/components/ui/DataTableToolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -52,8 +53,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center py-4">
+    <div className="space-y-4">
+      {/* <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
@@ -65,7 +66,8 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div>
+      </div> */}
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

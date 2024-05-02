@@ -1,41 +1,18 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import React from 'react';
+'use client'
 
-import { DataTable } from './data-table';
-
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
-
-import { Subject } from '@/schemas/subjects';
-import { allSubjects } from '@/controllers/subjects';
-import { columns } from './columns';
-
-
-
-export default async function page() {
-  const subjects: Subject[] = await allSubjects();
-
+export default function Component() {
   return (
-    <div className='p-6'>
-      <Breadcrumb>
-        <BreadcrumbList>
-          {/* <BreadcrumbItem>
-          <BreadcrumbLink href="/">Subject</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator /> */}
-          <BreadcrumbItem>
-            <BreadcrumbPage>Subject #1</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <DataTable columns={columns} data={subjects} />
+    <div
+      className="flex h-full flex-1 items-center justify-center"
+    >
+      <div className="flex justify-center h-full flex-col items-center gap-1 text-center ">
+        <h3 className="text-2xl font-bold tracking-tight">
+          No subject selected
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Select a subject from the sidebar to get started
+        </p>
+      </div>
     </div>
-  );
+  )
 }
