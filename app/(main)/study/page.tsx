@@ -15,7 +15,6 @@ import { StickyWrapper } from '@/components/sticky-wrapper';
 
 import { Unit } from './unit';
 import { Header } from './header';
-import { CardsChat } from './chat';
 
 const LearnPage = async () => {
   const [
