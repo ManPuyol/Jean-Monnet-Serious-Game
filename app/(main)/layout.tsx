@@ -15,8 +15,8 @@ import SidebarSubjects from '@/components/SidebarSubjects';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-h-screen overflow-clip w-full ">
-      <div className="flex flex-col">
+    <div className="max-h-screen h-full overflow-clip w-full">
+      <div className="flex flex-col h-full">
         <header className="flex end justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
