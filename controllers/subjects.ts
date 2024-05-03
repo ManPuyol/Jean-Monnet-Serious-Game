@@ -7,7 +7,7 @@ import { userSubjects } from "@/drizzle/schema";
 import { UUID } from "crypto";
 
 export const addSubject = async (subject: InsertSubject) => {
-  await db
+  return await db
     .insert(subjects)
     .values(subject);
 };

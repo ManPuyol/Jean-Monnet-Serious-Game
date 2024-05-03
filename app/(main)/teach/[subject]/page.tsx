@@ -16,7 +16,7 @@ import { allSubjects } from '@/controllers/subjects';
 import { columns } from '../columns';
 import { useRouter } from 'next/navigation';
 
-export default async function page() {
+export default function page() {
   const router = useRouter();
 
   const [activeSubject, setActiveSubject] = useState<Subject | null>(null);
@@ -41,7 +41,7 @@ export default async function page() {
         </BreadcrumbItem>
         <BreadcrumbSeparator /> */}
           <BreadcrumbItem>
-            <BreadcrumbPage>{"-"}</BreadcrumbPage>
+            <BreadcrumbPage>{activeSubject?.name}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
