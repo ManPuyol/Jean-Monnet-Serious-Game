@@ -32,6 +32,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "drizzle-orm": "^0.30.2",
+    "drizzle-zod": "^0.5.1",
     "geist": "^1.2.1",
     "lucide-react": "^0.366.0",
     "next": "latest",

@@ -1,4 +1,5 @@
 import { pgTable, serial, boolean, timestamp, integer, varchar, smallint } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { subjects } from "./subjects";
 
 export const units = pgTable("units", {
@@ -14,3 +15,6 @@ export const units = pgTable("units", {
 
 export type Unit = typeof units.$inferSelect;
 export type InsertUnit = typeof units.$inferInsert;
+
+export const insertUnitSchema = createInsertSchema(units);
+export const selectUnitSchema = createSelectSchema(units);

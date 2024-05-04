@@ -1,5 +1,5 @@
-
-import { Button } from "@/components/ui/button"
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 
-export default function DialogDemo() {
+export default function AddUnit() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -21,47 +20,92 @@ export default function DialogDemo() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add unit</DialogTitle>
-          {/* <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription> */}
+          <DialogDescription>Add a new unit to this subject</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
+        <UnitForm />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+import { z } from 'zod';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addUnit } from '@/controllers/unit';
+import { insertUnitSchema, units } from '@/schemas/units';
+
+type FormInputs = z.infer<typeof insertUnitSchema>;
+
+function UnitForm() {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormInputs>({
+    resolver: zodResolver(insertUnitSchema),
+  });
+
+  const onSubmit = async (data: FormInputs) => {
+    const subjectId: number = JSON.parse(
+      localStorage.getItem('activeSubject')!,
+    )?.id;
+    data.subjectId = subjectId;
+    console.log(data, subjectId);
+
+    await addUnit(data);
+  };
+
+  return (
+    <>
+      <form>
+        {/* <Controller
+          name="name"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
             <Input
+              {...field}
               id="name"
               placeholder="Tema 1"
               className="col-span-3"
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-            Description
-            </Label>
+          )}
+        />
+        {errors.name && <p>{errors.name.message}</p>} */}
+
+        <Controller
+          name="description"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
             <Input
+              {...field}
               id="description"
               placeholder="..."
               className="col-span-3"
             />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="questions" className="text-right">
-              Questions per quiz
-            </Label>
+          )}
+        />
+        {errors.description && <p>{errors.description.message}</p>}
+
+        <Controller
+          name="questionsPerQuiz"
+          control={control}
+          defaultValue={10}
+          render={({ field }) => (
             <Input
-              id="username"
-              type="number"
-              defaultValue="10"
+              {...field}
+              id="questions"
               className="col-span-3"
+              value={Number(field.value)}
             />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
+          )}
+        />
+        {errors.questionsPerQuiz && <p>{errors.questionsPerQuiz.message}</p>}
+      </form>
+      <DialogFooter>
+        <Button onClick={handleSubmit(onSubmit)}>Save changes</Button>
+      </DialogFooter>
+    </>
+  );
 }
