@@ -52,30 +52,29 @@ export default function page() {
       <h1 className="flex justify-between items-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         {activeSubject?.name}
         <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-          // onClick={() => navigator.clipboard.writeText(payment.id)}
-          >
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => deleteSubject(activeSubject!.id)}>
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+            // onClick={() => navigator.clipboard.writeText(payment.id)}
+            >
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => deleteSubject(activeSubject!.id)}>
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </h1>
       <span className="text-muted-foreground text-lg space-y-2 antialiased">
-        {activeSubject?.description}{' '}
+        {activeSubject?.description}
       </span>
-
 
       {activeSubject && <UnitTable subjectId={activeSubject.id} />}
     </div>
