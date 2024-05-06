@@ -10,7 +10,6 @@ export const quizDetails = pgTable("quiz_details", {
 	quizId: integer("quiz_id").references(() => quizzes.id),
 	userId: uuid("user_Id").references(() => users.id),
 	questionId: integer("question_id").references(() => questions.id),
-	subjectId: integer("subject_id").references(() => subjects.id),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 });

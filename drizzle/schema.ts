@@ -35,7 +35,6 @@ export const quizDetails = pgTable("quiz_details", {
 	quizId: integer("quiz_id").references(() => quizzes.id),
 	userId: uuid("user_Id").references(() => users.id),
 	questionId: integer("question_id").references(() => questions.id),
-	subjectId: integer("subject_id").references(() => subjects.id),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 });
@@ -47,13 +46,14 @@ export const quizzes = pgTable("quizzes", {
 	meta: varchar("meta", { length: 256 }).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+	subjectId: integer("subject_id").references(() => subjects.id),
 });
 
 export const subjects = pgTable("subjects", {
 	id: serial("id").primaryKey().notNull(),
-	name: varchar("name", { length: 256 }),
-	description: varchar("description", { length: 256 }),
-	active: boolean("active").default(true),
+	name: varchar("name", { length: 256 }).notNull(),
+	description: varchar("description", { length: 256 }).notNull(),
+	active: boolean("active").default(true).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
