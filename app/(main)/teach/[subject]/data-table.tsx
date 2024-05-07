@@ -49,19 +49,20 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-full">
       {/* <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             {
                 //console.log(event.target.value,table.getColumn('email')?.setFilterValue('a') , table.getColumn('email')?.getFilterValue())
-                table.getColumn('name')?.setFilterValue(event.target.value)
+                table.getColumn('description')?.setFilterValue(event.target.value)
             }
           }
           className="max-w-sm"
