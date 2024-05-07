@@ -36,20 +36,14 @@ export default function page() {
     setActiveSubject(subject);
   }, []);
 
+  const handleDelete = () => {
+    deleteSubject(activeSubject!.id);
+    localStorage.removeItem('activeSubject');
+    router.push('/teach');
+  };
   return (
-    <div className="p-6">
-      {/* <Breadcrumb>
-        <BreadcrumbList> */}
-      {/* <BreadcrumbItem>
-          <BreadcrumbLink href="/">Subject</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator /> */}
-      {/* <BreadcrumbItem>
-            <BreadcrumbPage>{activeSubject?.name}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb> */}
-      <h1 className="flex justify-between items-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+    <div className="p-6 h-full">
+      <h1 className="flex justify-between gap-4 items-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         {activeSubject?.name}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -66,9 +60,7 @@ export default function page() {
               Edit
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => deleteSubject(activeSubject!.id)}>
-              Delete
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </h1>
