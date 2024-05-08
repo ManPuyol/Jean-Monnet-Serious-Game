@@ -1,5 +1,6 @@
 "use server";
-import { InsertQuiz, quizzes } from "@/schemas/quizzes";
+import { InsertQuiz, quizzes, Quiz } from "@/schemas/quizzes";
+import { units, Unit } from "@/schemas/units";
 import { db } from "@/utils/drizzle/db";
 import { UUID } from "crypto";
 
@@ -39,8 +40,41 @@ export const updateQuiz = async (id: number, quiz: InsertQuiz) => {
     );
 };
 
+export const getActiveQuizzes = async (userId : UUID, subjectID: number) => {
+    const data = await db
+    .select({
+        unit : {
+            id : units.id,
+            description : units.description
+            //name : units.name
+        },
+        quiz : quizzes
+    })
+    .from(units)
+    .where(eq(units.subjectId, subjectID))
+    .leftJoin(quizzes, eq(units.id, quizzes.unitId))
+
+    const result = data.reduce<Record<number, { unit: Unit; quizzes: Quiz[] }>>(
+        (acc, row) => {
+          const unit = row.unit;
+          const quiz = row.quiz;
+          if (!acc[unit.id]) {
+            acc[unit.id] = { unit, quizzes: [] };
+          }
+          if (quiz) {
+            acc[unit.id].quizzes.push(quiz);
+          }
+          return acc;
+        },
+        {}
+      );
+    
+    console.log(result);
+    return result;
+}
+
 // Nº de quizzes hechos por el usuario
-export const getCountQuizzesFromUserAndSubject = async (userId : UUID, subjectId: number) => {
+export const getCountQuizzes = async (userId : UUID, subjectId: number) => {
     const data = await db
     .select(
         {count: count()}
@@ -57,7 +91,7 @@ export const getCountQuizzesFromUserAndSubject = async (userId : UUID, subjectId
 }
 
 // Nº de quizzes hechos por el usuario sobre el porcentaje definido en los parametros
-export const getCountQuizzesFromUserAbovePercentage = async (userId : UUID, percentage : number) => {
+export const getCountQuizzesAbovePercentage = async (userId : UUID, percentage : number) => {
     const data = await db
     .select(
         {count: count()}
@@ -73,47 +107,9 @@ export const getCountQuizzesFromUserAbovePercentage = async (userId : UUID, perc
     return data;
 }
 
-// Nº de quizzes hechos por el usuario sobre el porcentaje y asignatura definido en parametros
-export const getCountQuizzesFromUserAbovePercentageAndSubject = async (userId : UUID, percentage : number, subjectId: number) => {
-    const data = await db
-    .select(
-        {count: count()}
-    )
-    .from(quizzes)
-    .where(
-        and(
-            eq(quizzes.userId, userId),
-            eq(quizzes.subjectId, subjectId),
-            gte(quizzes.score, percentage)
-        )
-    );
-
-    return data;
-}
-
 // Nº de quizzes hechos por el usuario sobre el porcentaje (70%) y asignatura definida en parametros
-export const getCountQuizzesPassedFromUserAndSubject = async (userId : UUID, subjectId: number) => {
+export const getCountQuizzesPassed = async (userId : UUID, subjectId: number) => {
     const PERCENTAGE_TO_PASS_EXAM = 70;
     const data = await getCountQuizzesFromUserAbovePercentageAndSubject(userId, PERCENTAGE_TO_PASS_EXAM, subjectId);
-    return data;
-}
-
-// Resultados de los quizzes de una asignatura para las bolas de resultados
-export const getScoresFromQuizzesOfUserAndSubject = async (userId : UUID, subjectId: number) => {
-    const data = await db
-    .select(
-        {
-            quizzId: quizzes.id,
-            score: quizzes.score
-        }
-    )
-    .from(quizzes)
-    .where(
-        and(
-            eq(quizzes.userId, userId), 
-            eq(quizzes.subjectId, subjectId)
-        )
-    );
-
     return data;
 }
