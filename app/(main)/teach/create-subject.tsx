@@ -45,11 +45,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useRouter } from 'next/navigation';
 
 type FormInputs = z.infer<typeof insertSubjectSchema>;
 
 export default function AddSubject() {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const form = useForm<FormInputs>({
     resolver: zodResolver(insertSubjectSchema),
@@ -73,6 +75,7 @@ export default function AddSubject() {
           title: 'Subject added successfully',
           variant: 'primary',
         });
+        router.push(`/teach/${result[0].id}`)
       }
     } catch (error) {
       const errorMessage = (error as Error).message;
