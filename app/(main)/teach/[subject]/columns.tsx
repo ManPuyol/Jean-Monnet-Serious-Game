@@ -14,24 +14,24 @@ import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import { Unit } from '@/schemas/units';
 
 const columns: ColumnDef<Unit>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
   // {
-  //   accessorKey: 'name',
-  //   header: 'Name',
+  //   accessorKey: 'email',
+  //   header: ({ column }) => {
+  //       return (
+  //         <Button
+  //           variant="ghost"
+  //           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //         >
+  //           Email
+  //           <ArrowUpDown className="ml-2 h-4 w-4" />
+  //         </Button>
+  //       )
+  //     },
   // },
-  //   {
-  //     accessorKey: 'email',
-  //     header: ({ column }) => {
-  //         return (
-  //           <Button
-  //             variant="ghost"
-  //             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //           >
-  //             Email
-  //             <ArrowUpDown className="ml-2 h-4 w-4" />
-  //           </Button>
-  //         )
-  //       },
-  //   },
   {
     accessorKey: 'description',
     header: 'Description',
