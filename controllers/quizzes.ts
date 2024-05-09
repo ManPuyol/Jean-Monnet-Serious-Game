@@ -45,8 +45,8 @@ export const getActiveQuizzes = async (userId : UUID, subjectID: number) => {
     .select({
         unit : {
             id : units.id,
-            description : units.description
-            //name : units.name
+            description : units.description,
+            name : units.name
         },
         quiz : quizzes
     })
@@ -69,28 +69,22 @@ export const getActiveQuizzes = async (userId : UUID, subjectID: number) => {
         {}
       );
     
-    console.log(result);
     return result;
 }
 
-// Nº de quizzes hechos por el usuario
-export const getCountQuizzes = async (userId : UUID, subjectId: number) => {
+export const getCountQuizzes = async (userId : UUID) => {
     const data = await db
     .select(
         {count: count()}
     )
     .from(quizzes)
     .where(
-        and(
-            eq(quizzes.userId, userId), 
-            eq(quizzes.subjectId, subjectId)
-        )
+      eq(quizzes.userId, userId),
     );
 
     return data;
 }
 
-// Nº de quizzes hechos por el usuario sobre el porcentaje definido en los parametros
 export const getCountQuizzesAbovePercentage = async (userId : UUID, percentage : number) => {
     const data = await db
     .select(
@@ -107,9 +101,19 @@ export const getCountQuizzesAbovePercentage = async (userId : UUID, percentage :
     return data;
 }
 
-// Nº de quizzes hechos por el usuario sobre el porcentaje (70%) y asignatura definida en parametros
-export const getCountQuizzesPassed = async (userId : UUID, subjectId: number) => {
+export const getCountQuizzesPassed = async (userId : UUID) => {
     const PERCENTAGE_TO_PASS_EXAM = 70;
-    const data = await getCountQuizzesFromUserAbovePercentageAndSubject(userId, PERCENTAGE_TO_PASS_EXAM, subjectId);
+    const data = await getCountQuizzesAbovePercentage(userId, PERCENTAGE_TO_PASS_EXAM);
     return data;
+}
+
+export const getQuiz = async (userId : UUID, quizId : number) => {
+
+  // const hayScore = select score from quiz where score IS NOT null
+  // if (hayScore)
+    // SELECT id FROM questions WHERE NOT EXISTS (SELECT question_id FROM quiz_details WHERE user_id = ... AND unit_id = ...)
+    // ORDER BY RANDOM() LIMIT questions_per_quiz
+    // INSERT QUIZ_DETAILS
+  // {question : questions , question: answers[]}
+
 }
