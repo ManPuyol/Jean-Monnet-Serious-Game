@@ -1,6 +1,6 @@
 'use client'
 
-export default function Component() {
+export default function  NoSubject() {
   return (
     <div
       className="flex h-full flex-1 items-center justify-center"
