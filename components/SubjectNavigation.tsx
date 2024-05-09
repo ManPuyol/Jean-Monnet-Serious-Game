@@ -24,8 +24,7 @@ export default function SubjectNavigation({
           className="justify-start w-full truncate"
           onClick={() => {
             setActiveSubject(index);
-            localStorage.setItem('activeSubject', JSON.stringify(subject));
-            router.replace(`/${path}/${subject.name}`);
+            router.replace(`/${path}/${subject.id}`);
           }}
         >
           <BookOpenText className="mr-2 min-h-4 min-w-4 h-4 w-4" />
