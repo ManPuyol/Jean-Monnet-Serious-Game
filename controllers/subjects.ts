@@ -126,12 +126,12 @@ export const getActiveSubjects = async (userId: UUID) => {
 }
 
 export const getNotEnrolledSubjects = async (userId: UUID) => {
-  const subQuery = db.select({id : userSubjects.subjectId}).from(userSubjects).where(eq(userSubjects.userId, userId));
+  const subQuery = db.select({ id: userSubjects.subjectId }).from(userSubjects).where(eq(userSubjects.userId, userId));
 
   const data = await db
-  .select()
-  .from(subjects)
-  .where(notInArray(subjects.id, subQuery));
+    .select()
+    .from(subjects)
+    .where(notInArray(subjects.id, subQuery));
 
   return data;
 }
