@@ -2,8 +2,8 @@
 import { InsertSubject, Subject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
 
-import { eq, and } from "drizzle-orm";
 import { units, userSubjects } from "@/drizzle/schema";
+import { eq, and, notInArray } from "drizzle-orm";
 import { UUID } from "crypto";
 import { Unit } from "@/schemas/units";
 
@@ -121,6 +121,17 @@ export const getActiveSubjects = async (userId: UUID) => {
         eq(subjects.active, true)
       )
     );
+
+  return data;
+}
+
+export const getNotEnrolledSubjects = async (userId: UUID) => {
+  const subQuery = db.select({id : userSubjects.subjectId}).from(userSubjects).where(eq(userSubjects.userId, userId));
+
+  const data = await db
+  .select()
+  .from(subjects)
+  .where(notInArray(subjects.id, subQuery));
 
   return data;
 }

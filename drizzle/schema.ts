@@ -1,5 +1,5 @@
 import { pgTable, foreignKey, pgEnum, integer, uuid, serial, varchar, timestamp, boolean, smallint, text, unique, primaryKey } from "drizzle-orm/pg-core"
-  import { relations, sql } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -33,7 +33,7 @@ export const languages = pgTable("languages", {
 export const quizDetails = pgTable("quiz_details", {
 	id: serial("id").primaryKey().notNull(),
 	quizId: integer("quiz_id").references(() => quizzes.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_Id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
