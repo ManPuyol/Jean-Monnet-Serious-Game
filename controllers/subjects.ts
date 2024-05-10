@@ -1,9 +1,9 @@
 "use server";
 import { InsertSubject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
-
-import { eq, and } from "drizzle-orm";
-import { userSubjects } from "@/drizzle/schema";
+import { notExists } from "drizzle-orm";
+import { eq, and, notInArray } from "drizzle-orm";
+import { userSubjects } from "@/schemas/userSubjects";
 import { UUID } from "crypto";
 
 export const addSubject = async (subject: InsertSubject) => {
@@ -77,5 +77,16 @@ export const getActiveSubjectsFromUserID = async (userId : UUID) => {
       )
     );
     
+  return data;
+}
+
+export const getNotEnrolledSubjects = async (userId: UUID) => {
+  const subQuery = db.select({id : userSubjects.subjectId}).from(userSubjects).where(eq(userSubjects.userId, userId));
+
+  const data = await db
+  .select()
+  .from(subjects)
+  .where(notInArray(subjects.id, subQuery));
+
   return data;
 }
