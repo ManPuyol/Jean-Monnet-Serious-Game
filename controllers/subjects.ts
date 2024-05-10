@@ -1,15 +1,17 @@
 "use server";
-import { InsertSubject, subjects } from "@/schemas/subjects";
+import { InsertSubject, Subject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
 
-import { eq, and } from "drizzle-orm";
-import { userSubjects } from "@/drizzle/schema";
+import { units, userSubjects } from "@/drizzle/schema";
+import { eq, and, notInArray } from "drizzle-orm";
 import { UUID } from "crypto";
+import { Unit } from "@/schemas/units";
 
 export const addSubject = async (subject: InsertSubject) => {
   return await db
     .insert(subjects)
-    .values(subject);
+    .values(subject)
+    .returning({ id: subjects.id });
 };
 
 export const allSubjects = async () => {
@@ -31,10 +33,10 @@ export const allActiveSubjects = async () => {
 
 export const deleteSubject = async (id: number) => {
   await db
-  .delete(subjects)
-  .where(
-    eq(subjects.id, id)
-  );
+    .delete(subjects)
+    .where(
+      eq(subjects.id, id)
+    );
 };
 
 export const updateSubject = async (id: number, subject: InsertSubject) => {
@@ -49,21 +51,64 @@ export const updateSubject = async (id: number, subject: InsertSubject) => {
     );
 };
 
-export const getSubjectsFromUserID = async (userId : UUID) => {
+export const getSubjects = async (userId: UUID): Promise<Subject[]> => {
   const data = await db
-    .select({
-      subjects
-    })
+    .select()
     .from(subjects)
     .innerJoin(userSubjects, eq(subjects.id, userSubjects.subjectId))
     .where(
       eq(userSubjects.userId, userId)
     );
 
-  return data;
+  const subjectList = data.map((item) => item.subjects);
+  return subjectList;
+}
+export const getSubject = async (subjectId: number) => {
+  // const nnnn = await db.query.subjects.findFirst({
+  //   where: {
+  //     id: subjectId
+  //   }, 
+  //   with: {
+  //     units: true
+  //   }
+  // });
+  try {
+
+    const data = await db
+      .select()
+      .from(subjects)
+      .leftJoin(units, eq(subjects.id, units.subjectId))
+      .where(eq(subjects.id, subjectId));
+
+    if (!data.length) {
+      throw new Error("Subject not found");
+    }
+
+    const result = data.reduce<Record<number, { subject: Subject; units: Unit[] }>>(
+      (acc, row) => {
+        const subject = row.subjects;
+        const unit = row.units;
+        if (!acc[subject.id]) {
+          acc[subject.id] = { subject, units: [] };
+        }
+        if (unit) {
+          acc[subject.id].units.push(unit);
+        }
+        return acc;
+      },
+      {}
+    );
+    const subject = Object.values(result).map((res) => ({ ...res.subject, units: res.units }))[0];
+
+    return subject;
+
+  } catch (error) {
+    console.error(error);
+    throw new Error("Subject not found");
+  }
 }
 
-export const getActiveSubjectsFromUserID = async (userId : UUID) => {
+export const getActiveSubjects = async (userId: UUID) => {
   const data = await db
     .select({
       subjects
@@ -72,10 +117,21 @@ export const getActiveSubjectsFromUserID = async (userId : UUID) => {
     .innerJoin(userSubjects, eq(subjects.id, userSubjects.subjectId))
     .where(
       and(
-        eq(userSubjects.userId, userId), 
+        eq(userSubjects.userId, userId),
         eq(subjects.active, true)
       )
     );
-    
+
+  return data;
+}
+
+export const getNotEnrolledSubjects = async (userId: UUID) => {
+  const subQuery = db.select({ id: userSubjects.subjectId }).from(userSubjects).where(eq(userSubjects.userId, userId));
+
+  const data = await db
+    .select()
+    .from(subjects)
+    .where(notInArray(subjects.id, subQuery));
+
   return data;
 }

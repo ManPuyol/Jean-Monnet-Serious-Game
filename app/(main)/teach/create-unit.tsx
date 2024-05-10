@@ -46,10 +46,12 @@ import {
 } from '@/components/ui/form';
 import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
+import { useParams } from 'next/navigation';
 
 type FormInputs = z.infer<typeof insertUnitSchema>;
 
 function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const params = useParams<{ subject: string }>();
   const form = useForm<FormInputs>({
     resolver: zodResolver(insertUnitSchema),
   });
@@ -57,8 +59,8 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
 
   const onSubmit = async (data: FormInputs) => {
     setOpen(false);
-
-    data.subjectId = JSON.parse(localStorage.getItem('activeSubject')!).id!;
+    data.subjectId = Number(params.subject);
+    alert(data.subjectId)
 
     try {
       const result = await addUnit(data);
@@ -89,6 +91,19 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={control}
             name="description"

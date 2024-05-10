@@ -10,7 +10,6 @@ export const subjects = pgTable("subjects", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
-
 export type Subject = typeof subjects.$inferSelect;
 export type InsertSubject = typeof subjects.$inferInsert;
 

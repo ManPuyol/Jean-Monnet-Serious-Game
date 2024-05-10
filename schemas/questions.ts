@@ -3,7 +3,7 @@ import { units } from "./units";
 
 export const questions = pgTable("questions", {
 	id: serial("id").primaryKey().notNull(),
-	unitId: integer("unit_id").references(() => units.id),
+	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	question: varchar("question", { length: 256 }),
 	hard: boolean("hard").default(false),
 	active: boolean("active").default(true),
