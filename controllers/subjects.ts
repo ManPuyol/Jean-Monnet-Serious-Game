@@ -64,7 +64,7 @@ export const getSubjects = async (userId: UUID): Promise<Subject[]> => {
   return subjectList;
 }
 export const getSubject = async (subjectId: number) => {
-  // const data = await db.query.subjects.findFirst({
+  // const nnnn = await db.query.subjects.findFirst({
   //   where: {
   //     id: subjectId
   //   }, 

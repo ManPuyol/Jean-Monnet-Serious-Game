@@ -10,7 +10,9 @@ export default function StudentSidebar({
       <div className="hidden md:flex h-full max-h-screen flex-col">
         <SidebarSubjects />
       </div>
-      <div className="h-[calc(100vh-60px)]">{children}</div>
+      <div className="h-[calc(100vh-60px)]">
+        {children}
+        </div>
     </div>
   );
 }
