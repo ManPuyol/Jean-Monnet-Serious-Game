@@ -86,7 +86,12 @@ export const getNotEnrolledSubjects = async (userId: UUID) => {
   const data = await db
   .select()
   .from(subjects)
-  .where(notInArray(subjects.id, subQuery));
+  .where(
+    and(
+      notInArray(subjects.id, subQuery),
+      eq(subjects.active, true)
+    )
+  );
 
   return data;
 }
