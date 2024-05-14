@@ -1,12 +1,13 @@
 "use server";
+import { quizzes } from "@/drizzle/schema";
 import { InsertUnit, units } from "@/schemas/units";
 import { db } from "@/utils/drizzle/db";
 import { eq, and } from "drizzle-orm";
 
 export const addUnit = async (unit: InsertUnit) => {
   await db
-  .insert(units)
-  .values(unit);
+    .insert(units)
+    .values(unit);
 };
 
 export const allUnits = async () => {
@@ -30,7 +31,7 @@ export const updateUnit = async (id: number, unit: InsertUnit) => {
     .where(eq(units.id, id));
 };
 
-export const getUnitsFromSubject= async (subjectId: number) => {
+export const getUnits = async (subjectId: number) => {
   const data = await db
     .select()
     .from(units)
@@ -38,15 +39,25 @@ export const getUnitsFromSubject= async (subjectId: number) => {
   return data;
 }
 
-export const getActiveUnitsFromSubject = async (subjectId: number) => {
-  const data = await db
-    .select()
-    .from(units)
-    .where(
-      and(
-        eq(units.subjectId, subjectId), 
-        eq(units.active, true)
-      )
-    )
+export const getActiveUnits = async (subjectId: number) => {
+  // const data = await db
+  //   .select()
+  //   .from(units)
+  //   .where(
+  //     and(
+  //       eq(units.subjectId, subjectId), 
+  //       eq(units.active, true)
+  //     )
+  //   )
+  const data = await db.query.units.findMany({
+    where: (units, { eq }) => (and(
+      eq(units.subjectId, subjectId),
+      eq(units.active, true)
+    )),
+    with: {
+      quizzes: true
+    }
+  });
+
   return data;
 }

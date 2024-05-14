@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/command';
 import { useEffect, useState, useTransition } from 'react';
 import { Subject } from '@/schemas/subjects';
-import { allSubjects } from '@/controllers/subjects';
+import { allSubjects, getNotEnrolledSubjects } from '@/controllers/subjects';
 import { cn } from '@/lib/utils';
 
 export function Enroll() {
@@ -34,10 +34,11 @@ export function Enroll() {
   const [selectedUsers, setSelectedUsers] = React.useState<any[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isPending, startTransition] = useTransition();
+  const userId = "9ad9571a-8c75-49ca-a658-9da64516dad7"
 
   React.useEffect(() => {
     startTransition(() => {
-      allSubjects().then(setSubjects);
+      getNotEnrolledSubjects(userId).then(setSubjects);
     });
   }, []);
 

@@ -21,13 +21,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
+      <body className="h-[100vh] bg-background text-foreground">
       <ThemeProvider
         attribute="class"
         enableSystem
         disableTransitionOnChange
       >
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="max-h-screen h-full flex flex-col items-center">
           {children}
         </main>
         <Toaster />

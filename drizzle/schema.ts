@@ -1,5 +1,5 @@
 import { pgTable, foreignKey, pgEnum, integer, uuid, serial, varchar, timestamp, boolean, smallint, text, unique, primaryKey } from "drizzle-orm/pg-core"
-  import { sql } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -50,6 +50,13 @@ export const quizzes = pgTable("quizzes", {
 	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 });
 
+export const quizzesRelations = relations(quizzes, ({ one }) => ({
+	unit: one(units, {
+	  fields: [quizzes.unitId],
+	  references: [units.id],
+	}),
+  }));
+
 export const subjects = pgTable("subjects", {
 	id: serial("id").primaryKey().notNull(),
 	name: varchar("name", { length: 256 }).notNull(),
@@ -69,6 +76,10 @@ export const units = pgTable("units", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 	name: text("name").notNull(),
 });
+
+export const unitsRelations = relations(units, ({ many }) => ({
+	quizzes: many(quizzes),
+  }));
 
 export const questions = pgTable("questions", {
 	id: serial("id").primaryKey().notNull(),

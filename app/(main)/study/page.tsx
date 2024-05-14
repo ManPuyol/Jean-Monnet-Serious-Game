@@ -15,16 +15,15 @@ import { StickyWrapper } from '@/components/sticky-wrapper';
 
 import { Unit } from './unit';
 import { Header } from './header';
-import { CardsChat } from './chat';
+import { getActiveUnits } from '@/controllers/unit';
 
 const LearnPage = async () => {
   const [
     userProgress,
-    units,
     courseProgress,
     lessonPercentage,
     userSubscription,
-  ]: any[] = [{}, {}, {}, {}, {}];
+  ]: any[] = [{}, {}, {}, {}];
 
   // if (!userProgress || !userProgress.activeCourse) {
   //   redirect("/courses");
@@ -34,72 +33,30 @@ const LearnPage = async () => {
   //   redirect("/courses");
   // }
 
+  const userId = "9ad9571a-8c75-49ca-a658-9da64516dad7"
+  const units = await getActiveUnits(2);
+  console.log(units)
+
   return (
     <div className="flex flex-row-reverse gap-[24px] p-6 ">
       <StickyWrapper>
         <Quests points={userProgress.points} />
       </StickyWrapper>
         <FeedWrapper>
-          <Unit
-            id={1}
-            order={1}
-            description={'desc'}
-            title="Unit 1"
-            lessons={null}
-            activeLesson={
-              courseProgress.activeLesson as
-                | (any & {
-                    unit: any;
-                  })
-                | undefined
-            }
-            activeLessonPercentage={lessonPercentage}
-          />
-          <Unit
-            id={1}
-            order={1}
-            description={'desc'}
-            title="Unit 1"
-            lessons={null}
-            activeLesson={
-              courseProgress.activeLesson as
-                | (any & {
-                    unit: any;
-                  })
-                | undefined
-            }
-            activeLessonPercentage={lessonPercentage}
-          />
-          <Unit
-            id={1}
-            order={1}
-            description={'desc'}
-            title="Unit 1"
-            lessons={null}
-            activeLesson={
-              courseProgress.activeLesson as
-                | (any & {
-                    unit: any;
-                  })
-                | undefined
-            }
-            activeLessonPercentage={lessonPercentage}
-          />
-          <Unit
-            id={1}
-            order={1}
-            description={'desc'}
-            title="Unit 1"
-            lessons={null}
-            activeLesson={
-              courseProgress.activeLesson as
-                | (any & {
-                    unit: any;
-                  })
-                | undefined
-            }
-            activeLessonPercentage={lessonPercentage}
-          />
+            {
+            units.map((unit) => (
+              <Unit
+                key={unit.id}
+                id={unit.id}
+                order={1}
+                description={unit.description}
+                title={unit.name}
+                lessons={null}
+                activeLesson={courseProgress.activeLesson}
+                activeLessonPercentage={lessonPercentage}
+              />
+            ))
+          }
         </FeedWrapper>
     </div>
   );
