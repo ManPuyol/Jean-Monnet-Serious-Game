@@ -70,7 +70,7 @@ export const LessonButton = ({
             </div>
 
             <Button
-              variant={locked ? 'locked' : 'default'}
+              variant={locked ? 'ghost' : 'default'}
               className="h-[70px] w-[70px] border-b-8 rounded-full"
             >
               <Icon
@@ -86,7 +86,7 @@ export const LessonButton = ({
           </div>
         ) : (
           <Button
-            variant={locked ? 'locked' : 'default'}
+            variant={locked ? 'ghost' : 'default'}
             className="h-[70px] w-[70px] border-b-8 rounded-full"
           >
             <Icon

@@ -6,7 +6,7 @@ export const quizzes = pgTable("quizzes", {
 	id: serial("id").primaryKey().notNull(),
 	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	score: smallint("score"),
-	meta: varchar("meta", { length: 256 }).notNull(),
+	meta: varchar("meta", { length: 256 }),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),

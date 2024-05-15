@@ -63,12 +63,12 @@ export default function AddSubject() {
     setOpen(false);
 
     try {
-      const result = await addSubject({ name, description });
-      if (result?.error) {
+      const result: { id: number; error?: Error }[] = await addSubject({ name, description });
+      if (result[0]?.error) {
         toast({
           variant: 'destructive',
           title: 'Failed to add subject',
-          description: result?.error.message,
+          description: result[0]?.error.message,
         });
       } else {
         toast({

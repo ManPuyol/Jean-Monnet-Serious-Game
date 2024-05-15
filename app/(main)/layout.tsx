@@ -30,7 +30,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
-              <SidebarSubjects />
+              {/* <SidebarSubjects /> */}
             </SheetContent>
           </Sheet>
           <div id="logo" className="items-center">

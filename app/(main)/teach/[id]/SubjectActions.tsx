@@ -22,9 +22,10 @@ export function SubjectActions({ subject }: { subject: Subject }) {
       toast({ title: 'Subject deleted successfully', variant: 'primary' });
       router.push('/teach');
     } catch (error) {
+      const errorMessage = (error as Error).message;
       toast({
         title: 'Failed to delete subject',
-        description: error.message as string,
+        description: errorMessage,
         variant: 'destructive',
       });
     }
