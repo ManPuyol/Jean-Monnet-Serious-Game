@@ -61,6 +61,7 @@ export const getActiveQuizzes = async (userId : UUID, subjectID: number) => {
           const unit = row.unit;
           const quiz = row.quiz;
           if (!acc[unit.id]) {
+            //@ts-ignore
             acc[unit.id] = { unit, quizzes: [] };
           }
           if (quiz) {

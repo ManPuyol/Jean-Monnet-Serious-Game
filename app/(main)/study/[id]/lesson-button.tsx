@@ -23,7 +23,7 @@ export const LessonButton = ({
   current,
   percentage,
 }: Props) => {
-  const cycleLength = 8;
+  const cycleLength = totalCount;
   const cycleIndex = index % cycleLength;
 
   let indentationLevel;
@@ -70,14 +70,14 @@ export const LessonButton = ({
             </div>
 
             <Button
-              variant={locked ? 'locked' : 'default'}
+              variant={locked ? 'ghost' : 'default'}
               className="h-[70px] w-[70px] border-b-8 rounded-full"
             >
               <Icon
                 className={cn(
                   'h-10 w-10',
                   locked
-                    ? 'fill-neutral-400 text-neutral-400 stroke-neutral-400'
+                    ? 'fill-muted text-muted stroke-muted'
                     : 'fill-white text-white',
                   isCompleted && 'fill-none stroke-[4]',
                 )}
@@ -86,7 +86,7 @@ export const LessonButton = ({
           </div>
         ) : (
           <Button
-            variant={locked ? 'locked' : 'default'}
+            variant={locked ? 'ghost' : 'default'}
             className="h-[70px] w-[70px] border-b-8 rounded-full"
           >
             <Icon

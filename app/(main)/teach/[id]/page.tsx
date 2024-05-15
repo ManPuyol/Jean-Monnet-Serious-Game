@@ -7,11 +7,11 @@ import { SubjectActions } from './SubjectActions';
 export default async function page({
   params,
 }: {
-  params: { subject: string };
+  params: { id: string };
 }) {
   let subject;
   try {
-    subject = await getSubject(params.subject as unknown as number);
+    subject = await getSubject(params.id as unknown as number);
   } catch (error) {
     redirect('/teach');
   }

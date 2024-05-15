@@ -47,11 +47,12 @@ import {
 import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 import { useParams } from 'next/navigation';
+import ts from 'typescript';
 
 type FormInputs = z.infer<typeof insertUnitSchema>;
 
 function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
-  const params = useParams<{ subject: string }>();
+  const params = useParams<{ id: string }>();
   const form = useForm<FormInputs>({
     resolver: zodResolver(insertUnitSchema),
   });
@@ -59,15 +60,17 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
 
   const onSubmit = async (data: FormInputs) => {
     setOpen(false);
-    data.subjectId = Number(params.subject);
-    alert(data.subjectId)
+    data.subjectId = Number(params.id);
 
     try {
+      //@ts-ignore
       const result = await addUnit(data);
+      //@ts-ignore
       if (result?.error) {
         toast({
           variant: 'destructive',
           title: 'Failed to add subject',
+          //@ts-ignore
           description: result?.error.message,
         });
       } else {

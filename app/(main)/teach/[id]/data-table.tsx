@@ -61,7 +61,6 @@ export function DataTable<TData, TValue>({
           value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             {
-                //console.log(event.target.value,table.getColumn('email')?.setFilterValue('a') , table.getColumn('email')?.getFilterValue())
                 table.getColumn('description')?.setFilterValue(event.target.value)
             }
           }

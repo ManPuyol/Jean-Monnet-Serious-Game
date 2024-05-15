@@ -1,10 +1,10 @@
 import { getSubjects } from '@/controllers/subjects';
-import { Enroll } from '@/app/(main)/study/enroll';
+import { Enroll } from '@/app/(main)/study/[id]/enroll';
 import SubjectNavigation from './SubjectNavigation';
 import { Subject } from '@/schemas/subjects'; // Import the Subject type
 
-export default async function StudentSidebar() {
-  const userId = "9ad9571a-8c75-49ca-a658-9da64516dad7"
+export default async function StudentSidebar({activeSubjectId}: {activeSubjectId: string}) { // Specify the type of the activeSubject variable
+  const userId = 'e51f9ddf-4534-49e5-b1ff-aef5a43c8256'
 
   const subjects: Subject[] = await getSubjects(userId); // Specify the type of the subjects variable
   return (
@@ -14,7 +14,7 @@ export default async function StudentSidebar() {
           <h3 className="font-semibold text-lg tracking-tight">Subjects</h3>
           <Enroll />
         </div>
-        <SubjectNavigation subjects={subjects} path="study" />
+        <SubjectNavigation subjects={subjects} path="study" activeSubjectId={activeSubjectId} />
       </div>
     </div>
   );
