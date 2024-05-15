@@ -50,6 +50,7 @@ export const getActiveUnits = async (subjectId: number) => {
   //     )
   //   )
   const data = await db.query.units.findMany({
+    orderBy: (units, { asc }) => [asc(units.id)],
     where: (units, { eq }) => (and(
       eq(units.subjectId, subjectId),
       eq(units.active, true)
