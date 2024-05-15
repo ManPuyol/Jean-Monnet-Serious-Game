@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
-import { CircleUser, Menu, Package2 } from 'lucide-react';
+import { CircleUser, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -10,25 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Enroll } from '@/app/(main)/study/enroll';
-import SidebarSubjects from '@/components/SidebarSubjects';
 import { ModeToggle } from '@/components/ModeToggle';
-import { cn } from '@/lib/utils';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import SidebarSubjects from '@/components/SidebarSubjects';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-      <div className="hidden  bg-muted/40 md:block">
-        <div className="flex h-full max-h-screen flex-col">
-          <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6"></div>
-          <div  className="flex-1 border-r pt-2">
-            <SidebarSubjects />
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-col">
-        <header className="flex end justify-between md:justify-end h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+    <div className="max-h-screen h-full overflow-clip w-full">
+      <div className="flex flex-col h-full">
+        <header className="flex end justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -42,9 +31,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
               <SidebarSubjects />
-
             </SheetContent>
           </Sheet>
+          <div id="logo" className="items-center">
+            Jean Monnet
+          </div>
           <div className="flex gap-4">
             <ModeToggle />
             <DropdownMenu>

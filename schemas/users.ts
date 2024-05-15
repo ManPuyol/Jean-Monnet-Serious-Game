@@ -9,11 +9,11 @@ export const users = pgTable("users", {
 },
 (table) => {
 	return {
-		publicUsersAuthIdFkey: foreignKey({
+		usersIdFkey: foreignKey({
 			columns: [table.id],
 			foreignColumns: [table.id],
-			name: "public_users_auth_id_fkey"
-		}),
+			name: "users_id_fkey"
+		}).onUpdate("cascade").onDelete("cascade"),
 		usersAuthIdUnique: unique("users_auth_id_unique").on(table.id),
 	}
 });
