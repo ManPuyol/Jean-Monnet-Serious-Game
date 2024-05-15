@@ -51,7 +51,7 @@ import { useParams } from 'next/navigation';
 type FormInputs = z.infer<typeof insertUnitSchema>;
 
 function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
-  const params = useParams<{ subject: string }>();
+  const params = useParams<{ id: string }>();
   const form = useForm<FormInputs>({
     resolver: zodResolver(insertUnitSchema),
   });
@@ -59,7 +59,7 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
 
   const onSubmit = async (data: FormInputs) => {
     setOpen(false);
-    data.subjectId = Number(params.subject);
+    data.subjectId = Number(params.id);
     alert(data.subjectId)
 
     try {

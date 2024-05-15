@@ -2,18 +2,26 @@ import Link from "next/link";
 import { NotebookText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type Props = {
   title: string;
   description: string;
+  locked: boolean;
 };
 
 export const UnitBanner = ({
   title,
   description,
+  locked
 }: Props) => {
   return (
-    <div className="w-full rounded-xl bg-primary p-5 text-white flex items-center justify-between">
+    <div className={cn(
+      "w-full rounded-xl p-5 text-white flex items-center justify-between",
+      locked
+        ? 'bg-muted-foreground text-muted opacity-50'
+        : ' bg-primary')
+        }>
       <div className="space-y-2.5">
         <h3 className="text-2xl font-bold">
           {title}

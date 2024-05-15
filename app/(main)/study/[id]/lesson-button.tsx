@@ -23,7 +23,7 @@ export const LessonButton = ({
   current,
   percentage,
 }: Props) => {
-  const cycleLength = 8;
+  const cycleLength = totalCount;
   const cycleIndex = index % cycleLength;
 
   let indentationLevel;
@@ -77,7 +77,7 @@ export const LessonButton = ({
                 className={cn(
                   'h-10 w-10',
                   locked
-                    ? 'fill-neutral-400 text-neutral-400 stroke-neutral-400'
+                    ? 'fill-muted text-muted stroke-muted'
                     : 'fill-white text-white',
                   isCompleted && 'fill-none stroke-[4]',
                 )}
