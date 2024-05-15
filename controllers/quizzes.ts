@@ -1,6 +1,6 @@
 "use server";
 import { quizDetails } from "@/drizzle/schema";
-import { QuizAnswers } from "@/schemas/quizAnswers";
+import { QuizAnswers } from "@/interfaces/quizAnswers";
 import { InsertQuiz, quizzes, Quiz } from "@/schemas/quizzes";
 import { units, Unit } from "@/schemas/units";
 import { db } from "@/utils/drizzle/db";
