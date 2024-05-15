@@ -15,7 +15,6 @@ export async function DELETE(req: NextRequest, {params}:{ params: { id: number }
         }
       );
     } catch (error: any) {
-      console.log(error);
       return NextResponse.json(
         {
           message: error.message,
