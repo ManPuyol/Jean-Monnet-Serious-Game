@@ -33,7 +33,7 @@ export const languages = pgTable("languages", {
 export const quizDetails = pgTable("quiz_details", {
 	id: serial("id").primaryKey().notNull(),
 	quizId: integer("quiz_id").references(() => quizzes.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	userId: uuid("user_Id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
@@ -44,7 +44,7 @@ export const quizzes = pgTable("quizzes", {
 	id: serial("id").primaryKey().notNull(),
 	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
 	score: smallint("score"),
-	meta: varchar("meta", { length: 256 }).notNull(),
+	meta: varchar("meta", { length: 256 }),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
