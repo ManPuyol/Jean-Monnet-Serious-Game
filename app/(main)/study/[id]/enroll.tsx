@@ -26,15 +26,19 @@ import {
 } from '@/components/ui/command';
 import { useEffect, useState, useTransition } from 'react';
 import { Subject } from '@/schemas/subjects';
-import { allSubjects, getNotEnrolledSubjects } from '@/controllers/subjects';
+import {
+  allSubjects,
+  enrollSubjects,
+  getNotEnrolledSubjects,
+} from '@/controllers/subjects';
 import { cn } from '@/lib/utils';
 
 export function Enroll() {
   const [open, setOpen] = React.useState(false);
-  const [selectedUsers, setSelectedUsers] = React.useState<any[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = React.useState<any[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isPending, startTransition] = useTransition();
-  const userId = "9ad9571a-8c75-49ca-a658-9da64516dad7"
+ const userId = 'e51f9ddf-4534-49e5-b1ff-aef5a43c8256';
 
   React.useEffect(() => {
     startTransition(() => {
@@ -88,17 +92,17 @@ export function Enroll() {
                     key={subject.name}
                     className="flex items-center px-2"
                     onSelect={() => {
-                      if (selectedUsers.includes(subject)) {
-                        return setSelectedUsers(
-                          selectedUsers.filter(
+                      if (selectedSubjects.includes(subject)) {
+                        return setSelectedSubjects(
+                          selectedSubjects.filter(
                             selectedUser => selectedUser !== subject,
                           ),
                         );
                       }
 
-                      return setSelectedUsers(
+                      return setSelectedSubjects(
                         [...subjects].filter(u =>
-                          [...selectedUsers, subject].includes(u),
+                          [...selectedSubjects, subject].includes(u),
                         ),
                       );
                     }}
@@ -111,7 +115,7 @@ export function Enroll() {
                         {subject.description}
                       </p>
                     </div>
-                    {selectedUsers.includes(subject) ? (
+                    {selectedSubjects.includes(subject) ? (
                       <Check className="ml-auto flex h-5 w-5 text-primary" />
                     ) : null}
                   </CommandItem>
@@ -120,9 +124,9 @@ export function Enroll() {
             </CommandList>
           </Command>
           <DialogFooter className="flex items-center border-t p-4 sm:justify-between  ">
-            {selectedUsers.length > 0 ? (
+            {selectedSubjects.length > 0 ? (
               <p className="text-sm text-muted-foreground">
-                {selectedUsers.length} subjects selected
+                {selectedSubjects.length} subjects selected
               </p>
             ) : (
               <p className="text-sm text-muted-foreground">
@@ -130,9 +134,11 @@ export function Enroll() {
               </p>
             )}
             <Button
-              disabled={selectedUsers.length < 1}
+              disabled={selectedSubjects.length < 1}
               onClick={() => {
+                const subjectIds = selectedSubjects.map(subject => subject.id);
                 setOpen(false);
+                enrollSubjects(userId, subjectIds);
               }}
             >
               Enroll

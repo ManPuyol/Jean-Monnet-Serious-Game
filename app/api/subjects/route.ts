@@ -7,7 +7,6 @@ export async function GET() {
     const results = allSubjects()
     return NextResponse.json(results);
   } catch (error: any) {
-    console.log(error);
     return NextResponse.json(
       {
         message: error.message,

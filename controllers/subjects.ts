@@ -3,7 +3,7 @@ import { InsertSubject, Subject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
 
 import { units, userSubjects } from "@/drizzle/schema";
-import { eq, and, notInArray } from "drizzle-orm";
+import { eq, and, notInArray, exists, inArray } from "drizzle-orm";
 import { UUID } from "crypto";
 import { Unit } from "@/schemas/units";
 
@@ -139,4 +139,25 @@ export const getNotEnrolledSubjects = async (userId: UUID) => {
   );
 
   return data;
+}
+export const getEnrolledSubjects = async (userId: UUID) => {
+  const subQuery = db.select({ id: userSubjects.subjectId }).from(userSubjects).where(eq(userSubjects.userId, userId));
+
+  const data = await db
+    .select()
+    .from(subjects)
+    .where(and(inArray(subjects.id, subQuery), eq(subjects.active, true)));
+
+  return data;
+}
+
+export const enrollSubjects = async (userId: UUID, subjectIds: number[]) => {
+  await Promise.all(subjectIds.map(subjectId =>
+    db
+      .insert(userSubjects)
+      .values({
+        userId,
+        subjectId
+      })
+  ));
 }

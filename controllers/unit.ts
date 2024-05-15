@@ -2,6 +2,7 @@
 import { quizzes } from "@/drizzle/schema";
 import { InsertUnit, units } from "@/schemas/units";
 import { db } from "@/utils/drizzle/db";
+import { UUID } from "crypto";
 import { eq, and } from "drizzle-orm";
 
 export const addUnit = async (unit: InsertUnit) => {
@@ -39,23 +40,17 @@ export const getUnits = async (subjectId: number) => {
   return data;
 }
 
-export const getActiveUnits = async (subjectId: number) => {
-  // const data = await db
-  //   .select()
-  //   .from(units)
-  //   .where(
-  //     and(
-  //       eq(units.subjectId, subjectId), 
-  //       eq(units.active, true)
-  //     )
-  //   )
+export const getActiveUnits = async (subjectId: number, userId: UUID) => {
   const data = await db.query.units.findMany({
+    orderBy: (units, { asc }) => [asc(units.id)],
     where: (units, { eq }) => (and(
       eq(units.subjectId, subjectId),
       eq(units.active, true)
     )),
     with: {
-      quizzes: true
+      quizzes: {
+        where: (quiz, { eq }) => eq(quiz.userId, userId),
+      },
     }
   });
 
