@@ -36,7 +36,7 @@ const LearnPage = async ({ params }: { params: { id: string } }) => {
   //   redirect("/courses");
   // }
   const userId = 'e51f9ddf-4534-49e5-b1ff-aef5a43c8256';
-  const units = await getActiveUnits(Number(params.id));
+  const units = await getActiveUnits(Number(params.id), userId);
 
   return (
     <div className="flex flex-row-reverse gap-[24px] p-6 ">
