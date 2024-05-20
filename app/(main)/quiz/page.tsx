@@ -1,7 +1,7 @@
 'use client';
 import { use, useState } from 'react';
 import { Question } from '@/schemas/questions';
-import Test from './Quesition';
+import Test from './Test';
 import { Progress } from '@/components/ui/progress';
 import { LessonButton } from '../study/[id]/lesson-button';
 import { Button } from '@/components/ui/button';
