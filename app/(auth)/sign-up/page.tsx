@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -26,6 +26,7 @@ import { PasswordInput } from "@/components/password-input";
 export default function Login(){
   let [isPending, startTransition] = useTransition();
   const { toast } = useToast()
+  const router = useRouter();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,7 +39,12 @@ export default function Login(){
           variant: "destructive",
           title: error.message
         });
-      }
+      }else 
+        toast({
+          variant: "primary",
+          title: "Account created successfully! Please sign in."
+        });
+        router.push('/sign-in');
     });
   }
   
