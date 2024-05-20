@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
-import { CircleUser, Library  } from 'lucide-react';
+import { CircleUser } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,22 +10,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from '@/components/ModeToggle';
+import StudyLink from '@/components/StudyLink';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div className="max-h-screen h-full overflow-clip w-full">
       <div className="flex flex-col h-full">
         <header className="flex end justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
-          <Link href='/study'>
-            <Button
-              variant="outline"
-              size="icon"
-              className="shrink-0 md:hidden"
-            >
-              <Library  className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </Link>
+          <StudyLink/>
           <div id="logo" className="items-center">
             Jean Monnet
           </div>
