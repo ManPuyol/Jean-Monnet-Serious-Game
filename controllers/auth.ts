@@ -17,7 +17,7 @@ export const signIn = async (formData: FormData) => {
     return JSON.stringify(result);
     // throw new Error("Could not authenticate user");
   } else {
-    return redirect('/protected');
+    return redirect('/study');
   }
 };
 
@@ -52,7 +52,7 @@ export const signUp = async (formData: FormData) => {
     console.error(result.error.message);
     return JSON.stringify(result);
   } else {
-    return redirect('/sign-in');
+    return JSON.stringify(result);
   }
 
   // return redirect("/login?message=Check email to continue sign in process");

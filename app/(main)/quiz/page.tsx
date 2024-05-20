@@ -1,67 +1,163 @@
+'use client';
+import { use, useState } from 'react';
+import { Question } from '@/schemas/questions';
+import Test from './Test';
 import { Progress } from '@/components/ui/progress';
-import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar';
+import { LessonButton } from '../study/[id]/lesson-button';
 import { Button } from '@/components/ui/button';
-import { Heart } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import JSConfetti from 'js-confetti';
 
-export default function Quiz() {
+function QuizResults({ getScore }: { getScore: Function }) {
+  const router = useRouter();
+  const score = getScore();
+
+  const jsConfetti = new JSConfetti();
+  let emojis: string[] = [];
+  if (score < 50) {
+    emojis = ['😢', '😭', '😞'];
+  } else if (score < 70) {
+    emojis = ['⭐', '🙀', '🎈'];
+  } else if (score > 98) {
+    emojis = ['💥', '😎', '✨', '🎉', '🎊'];
+  } else if (score >= 70) {
+    emojis = ['✨', '🎉', '🎊'];
+  }
+
+  confetti(emojis);
+
   return (
-    <div className="p-8 h-full max-h-full">
-      <div className="max-w-3xl mx-auto max-h-full">
-        <div className="flex justify-between items-center mb-6 gap-4">
-          <Progress className="w-full" value={90} />
-          <div className="flex items-center space-x-2">
-            <Heart className="h-6 w-6 font text-red-500" />
-            <span className="font-semibold">5</span>
-          </div>
-          {/* <Avatar>
-            <AvatarImage alt="User avatar" src="/placeholder.svg?height=40&width=40" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar> */}
+    <div className="flex flex-col h-full flex-1 justify-center items-center gap-6 p-6">
+      <Button
+        variant={'default'}
+        className="h-[70px] w-[70px] border-b-8 rounded-full "
+        onClick={() => confetti(emojis)}
+      >
+        <Star className={cn('h-10 w-10', 'fill-white text-white')} />
+      </Button>
+      <Progress className="w-1/2" value={score} />
+      <h2 className="text-4xl font-bold animate-in ">
+        You scored {score.toFixed(0)}%
+      </h2>
+      {Number(score.toFixed(0)) >= 70 && (
+        <div className="animate-in">
+          <p className="animate-wiggle font-semibold text-foreground text-2xl">
+            Quiz passed!
+          </p>
         </div>
-        <div className="mb-6 p-6 border rounded-md shadow ">
-          <h2 className="zsm:text-sm font-semibold text-center">
-            What is the capital of France? Lorem ipsum dolor sit amet,
-            consectetur adipisicing elit. Labore non placeat, quod aliquid
-            ratione quae fugit distinctio tempora suscipit, voluptates
-            voluptatem, dolorum voluptatum. Quisquam, quod. Lorem ipsum dolor sit
-          </h2>
-        </div>
-        <ScrollArea>
-          <div className="grid grid-cols-1 gap-4  h-full auto-rows-[1fr] ">
-            <Button
-              variant="success"
-              className="py-4 !h-auto whitespace-normal"
-            >
-              Paris - Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </Button>
-            <Button
-              variant="destructive"
-              className="py-4 !h-auto whitespace-normal"
-            >
-              London - Lorem ipsum dolor sit amet consectetur adipisicing
-              elit.Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </Button>
-            <Button
-              variant="secondary"
-              className="py-4 !h-auto whitespace-normal"
-            >
-              Berlin - Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </Button>
-            <Button
-              variant="secondary"
-              className="py-4 !h-auto whitespace-normal"
-            >
-              Madrid -
-            </Button>
-          </div>
-        </ScrollArea>
-        <div className="flex flex-row-reverse">
-          <Button variant="default" className="mt-6 w-1/3 py-4 ">
-            Next
-          </Button>
-        </div>
+      )}
+      <div className="flex  gap-4 ">
+        <Button
+          onClick={() => window.location.reload()}
+          variant="secondary"
+          className={cn(
+            'py-2 px-4',
+            Number(score.toFixed(0)) >= 70 ? 'hidden' : 'animate-wiggle',
+          )}
+        >
+          Try again
+        </Button>
+        <Button
+          onClick={() => router.back()}
+          variant="secondary"
+          className="py-2 px-4"
+        >
+          Finish
+        </Button>
       </div>
     </div>
+  );
+
+  function confetti(emojis: string[] = ['🎉', '🎊']) {
+    void jsConfetti.addConfetti({
+      emojis: emojis,
+    });
+  }
+}
+
+export default function Quiz() {
+  const questions: Question[] = [
+    {
+      id: 1,
+      unitId: 1,
+      question: 'What is the capital of France?',
+      hard: false,
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+    },
+    {
+      id: 2,
+      unitId: 1,
+      question: 'What is the capital of Germany?',
+      hard: false,
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+    },
+    {
+      id: 3,
+      unitId: 1,
+      question: 'What is the capital of Spain?',
+      hard: false,
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+    },
+  ];
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<any>([]);
+
+  function getScore() {
+    const correctAnswers = answers.reduce((acc: number, answer: any) => {
+      if (answer.correct) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
+    return (correctAnswers * 100) / questions.length;
+  }
+
+  return (
+    <>
+      {currentQuestion < questions.length ? (
+        <Test
+          question={questions[currentQuestion].question}
+          setCurrentQuestion={setCurrentQuestion}
+          setAnswers={setAnswers}
+          progress={(currentQuestion * 100) / questions.length}
+          answers={[
+            {
+              id: 1,
+              name: 'a',
+              createdAt: '',
+              updatedAt: '',
+              questionId: 1,
+              correct: true,
+            },
+            {
+              id: 2,
+              name: 'b',
+              createdAt: '',
+              updatedAt: '',
+              questionId: 1,
+              correct: false,
+            },
+            {
+              id: 3,
+              name: 'c',
+              createdAt: '',
+              updatedAt: '',
+              questionId: 1,
+              correct: false,
+            },
+          ].sort(() => Math.random() - 0.5)}
+        />
+      ) : (
+        <QuizResults getScore={getScore} />
+      )}
+    </>
   );
 }

@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import * as React from 'react';
-import { CircleUser, Menu } from 'lucide-react';
+import { CircleUser, Library  } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,28 +10,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from '@/components/ModeToggle';
-import SidebarSubjects from '@/components/SidebarSubjects';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div className="max-h-screen h-full overflow-clip w-full">
       <div className="flex flex-col h-full">
         <header className="flex end justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="shrink-0 md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
-              {/* <SidebarSubjects /> */}
-            </SheetContent>
-          </Sheet>
+          <Link href='/study'>
+            <Button
+              variant="outline"
+              size="icon"
+              className="shrink-0 md:hidden"
+            >
+              <Library  className="h-5 w-5" />
+              <span className="sr-only">Toggle navigation menu</span>
+            </Button>
+          </Link>
           <div id="logo" className="items-center">
             Jean Monnet
           </div>
