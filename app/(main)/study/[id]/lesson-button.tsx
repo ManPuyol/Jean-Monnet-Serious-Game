@@ -46,12 +46,9 @@ export const LessonButton = ({
 
   const Icon = isCompleted ? Check : isLast ? Crown : Star;
 
-  //const href = isCompleted ? `/quiz/${id}` : '/quiz';
-  const href = '/quiz';
-
   return (
     <Link
-      href={href}
+      href={`/quiz/${id}`}
       aria-disabled={locked}
       style={{ pointerEvents: locked ? 'none' : 'auto' }}
     >

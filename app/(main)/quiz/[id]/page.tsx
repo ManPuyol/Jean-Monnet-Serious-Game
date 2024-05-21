@@ -1,9 +1,8 @@
 'use client';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { Question } from '@/schemas/questions';
 import Test from './Test';
 import { Progress } from '@/components/ui/progress';
-import { LessonButton } from '../study/[id]/lesson-button';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
