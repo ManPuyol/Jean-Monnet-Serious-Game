@@ -1,7 +1,15 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
+import { getUser } from "./lib/utils";
 
 export async function middleware(request: NextRequest) {
+
+  if (request.nextUrl.pathname.startsWith('/teach')) {
+    const user = await getUser();
+    if (user?.user_metadata.role == 'student') {
+      return NextResponse.redirect(new URL('/study', request.url))
+    }
+  }
   return await updateSession(request);
 }
 

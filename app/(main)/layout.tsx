@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import * as React from 'react';
 import { CircleUser } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,13 +10,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from '@/components/ModeToggle';
 import StudyLink from '@/components/StudyLink';
+import { LogOutLink } from '@/components/LogOutLink';
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <div className="max-h-screen h-full overflow-clip w-full">
       <div className="flex flex-col h-full">
         <header className="flex end justify-between h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
-          <StudyLink/>
+          <StudyLink />
           <div id="logo" className="items-center">
             Jean Monnet
           </div>
@@ -38,7 +38,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={'/sign-in'}>Logout</Link>
+                  <LogOutLink />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
