@@ -14,7 +14,7 @@ export const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE'
 
 export const students = pgTable("students", {
 	id: integer("id").primaryKey().notNull(),
-	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
 export const achievements = pgTable("achievements", {
@@ -32,30 +32,30 @@ export const languages = pgTable("languages", {
 
 export const quizDetails = pgTable("quiz_details", {
 	id: serial("id").primaryKey().notNull(),
-	quizId: integer("quiz_id").references(() => quizzes.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	quizId: integer("quiz_id").references(() => quizzes.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
-	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
 export const quizzes = pgTable("quizzes", {
 	id: serial("id").primaryKey().notNull(),
-	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_id").references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	score: smallint("score"),
 	meta: varchar("meta", { length: 256 }),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
-	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
 export const quizzesRelations = relations(quizzes, ({ one }) => ({
 	unit: one(units, {
-	  fields: [quizzes.unitId],
-	  references: [units.id],
+		fields: [quizzes.unitId],
+		references: [units.id],
 	}),
-  }));
+}));
 
 export const subjects = pgTable("subjects", {
 	id: serial("id").primaryKey().notNull(),
@@ -69,7 +69,7 @@ export const subjects = pgTable("subjects", {
 export const units = pgTable("units", {
 	id: serial("id").primaryKey().notNull(),
 	description: varchar("description", { length: 256 }).notNull(),
-	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	active: boolean("active").default(true),
 	questionsPerQuiz: smallint("questions_per_quiz").default(10).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
@@ -79,11 +79,11 @@ export const units = pgTable("units", {
 
 export const unitsRelations = relations(units, ({ many }) => ({
 	quizzes: many(quizzes),
-  }));
+}));
 
 export const questions = pgTable("questions", {
 	id: serial("id").primaryKey().notNull(),
-	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	unitId: integer("unit_id").references(() => units.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	question: varchar("question", { length: 256 }),
 	hard: boolean("hard").default(false),
 	active: boolean("active").default(true),
@@ -93,12 +93,23 @@ export const questions = pgTable("questions", {
 
 export const answers = pgTable("answers", {
 	id: serial("id").primaryKey().notNull(),
-	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	questionId: integer("question_id").references(() => questions.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	name: varchar("name", { length: 256 }),
 	correct: boolean("correct").default(false),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
+
+export const questionRelations = relations(questions, ({ many }) => ({
+	answers: many(answers),
+}));
+
+export const answersRelations = relations(answers, ({ one }) => ({
+	question: one(questions, {
+		fields: [answers.questionId],
+		references: [questions.id],
+	}),
+}));
 
 export const users = pgTable("users", {
 	id: uuid("id").primaryKey().notNull(),
@@ -107,40 +118,40 @@ export const users = pgTable("users", {
 	createdAt: timestamp("created_at", { mode: 'string' }),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		usersIdFkey: foreignKey({
-			columns: [table.id],
-			foreignColumns: [table.id],
-			name: "users_id_fkey"
-		}).onUpdate("cascade").onDelete("cascade"),
-		usersAuthIdUnique: unique("users_auth_id_unique").on(table.id),
-	}
-});
+	(table) => {
+		return {
+			usersIdFkey: foreignKey({
+				columns: [table.id],
+				foreignColumns: [table.id],
+				name: "users_id_fkey"
+			}).onUpdate("cascade").onDelete("cascade"),
+			usersAuthIdUnique: unique("users_auth_id_unique").on(table.id),
+		}
+	});
 
 export const teachers = pgTable("teachers", {
 	id: integer("id").primaryKey().notNull(),
-	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
 export const userAchievement = pgTable("user_achievement", {
-	userId: uuid("user_Id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	achievementId: integer("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_Id").notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	achievementId: integer("achievement_id").notNull().references(() => achievements.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 },
-(table) => {
-	return {
-		userAchievementPkey: primaryKey({ columns: [table.userId, table.achievementId], name: "user_achievement_pkey"})
-	}
-});
+	(table) => {
+		return {
+			userAchievementPkey: primaryKey({ columns: [table.userId, table.achievementId], name: "user_achievement_pkey" })
+		}
+	});
 
 export const userSubjects = pgTable("user_subjects", {
-	userId: uuid("user_id").defaultRandom().notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" } ),
+	userId: uuid("user_id").defaultRandom().notNull().references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" }),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
 },
-(table) => {
-	return {
-		userSubjectsPkey: primaryKey({ columns: [table.userId, table.subjectId], name: "user_subjects_pkey"})
-	}
-});
+	(table) => {
+		return {
+			userSubjectsPkey: primaryKey({ columns: [table.userId, table.subjectId], name: "user_subjects_pkey" })
+		}
+	});

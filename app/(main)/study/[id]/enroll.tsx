@@ -32,17 +32,21 @@ import {
   getNotEnrolledSubjects,
 } from '@/controllers/subjects';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { UUID } from 'crypto';
+import { User } from '@supabase/supabase-js';
 
-export function Enroll() {
+
+export function Enroll({user}: {user: User}) {
   const [open, setOpen] = React.useState(false);
   const [selectedSubjects, setSelectedSubjects] = React.useState<any[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isPending, startTransition] = useTransition();
- const userId = 'e51f9ddf-4534-49e5-b1ff-aef5a43c8256';
+  const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
     startTransition(() => {
-      getNotEnrolledSubjects(userId).then(setSubjects);
+      getNotEnrolledSubjects(user.id as UUID).then(setSubjects);
     });
   }, []);
 
@@ -138,7 +142,8 @@ export function Enroll() {
               onClick={() => {
                 const subjectIds = selectedSubjects.map(subject => subject.id);
                 setOpen(false);
-                enrollSubjects(userId, subjectIds);
+                enrollSubjects(user.id as UUID, subjectIds);
+                router.push(`/study/${subjectIds[0]}`);
               }}
             >
               Enroll
