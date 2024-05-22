@@ -13,53 +13,12 @@ import { Input } from '@/components/ui/input';
 
 export default function AddUnit() {
   const [open, setOpen] = useState(false);
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Add Unit</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Add unit</DialogTitle>
-          <DialogDescription>Add a new unit to this subject</DialogDescription>
-        </DialogHeader>
-        <UnitForm setOpen={setOpen} />
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { addUnit } from '@/controllers/unit';
-import { insertUnitSchema, units } from '@/schemas/units';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { useState } from 'react';
-import { toast } from '@/components/ui/use-toast';
-import { useParams } from 'next/navigation';
-import ts from 'typescript';
-
-type FormInputs = z.infer<typeof insertUnitSchema>;
-
-function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
   const params = useParams<{ id: string }>();
-  const form = useForm<FormInputs>({
-    resolver: zodResolver(insertUnitSchema),
-  });
-  const { control, handleSubmit, formState, setError, clearErrors } = form;
+  const router = useRouter();
 
   const onSubmit = async (data: FormInputs) => {
     setOpen(false);
+
     data.subjectId = Number(params.id);
 
     try {
@@ -74,6 +33,7 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
           description: result?.error.message,
         });
       } else {
+        router.refresh();
         toast({
           title: 'Unit added successfully',
           variant: 'primary',
@@ -90,6 +50,65 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
     }
   };
 
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>Add Unit</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add unit</DialogTitle>
+          <DialogDescription>Add a new unit to this subject</DialogDescription>
+        </DialogHeader>
+        <UnitForm setOpen={setOpen} onSubmit={onSubmit} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addUnit } from '@/controllers/unit';
+import { insertUnitSchema } from '@/schemas/units';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useState } from 'react';
+import { toast } from '@/components/ui/use-toast';
+import { useParams, useRouter } from 'next/navigation';
+
+export type FormInputs = z.infer<typeof insertUnitSchema>;
+
+export function UnitForm({
+  setOpen,
+  subjectId,
+  defaultName = '',
+  defaultDescription = '',
+  defaultQuestionsPerQuiz = 10,
+  onSubmit,
+}: {
+  setOpen?: (open: boolean) => void;
+  subjectId?: number;
+  defaultName?: string;
+  defaultDescription?: string;
+  defaultQuestionsPerQuiz?: number;
+  onSubmit: (data: FormInputs) => void;
+}) {
+  const form = useForm<FormInputs>({
+    resolver: zodResolver(insertUnitSchema),
+    defaultValues: {
+      name: defaultName,
+      description: defaultDescription,
+      questionsPerQuiz: defaultQuestionsPerQuiz,
+    },
+  });
+  const { control, handleSubmit } = form;
   return (
     <>
       <Form {...form}>
@@ -130,7 +149,6 @@ function UnitForm({ setOpen }: { setOpen: (open: boolean) => void }) {
                   <Input
                     {...field}
                     type="number"
-                    defaultValue={10}
                     onKeyDown={evt =>
                       ['e', 'E', '+', '-'].includes(evt.key) &&
                       evt.preventDefault()
