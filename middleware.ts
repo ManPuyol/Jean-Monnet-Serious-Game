@@ -3,12 +3,16 @@ import { updateSession } from "@/utils/supabase/middleware";
 import { getUser } from "./lib/utils";
 
 export async function middleware(request: NextRequest) {
+  const user = await getUser();
 
-  if (request.nextUrl.pathname.startsWith('/teach')) {
-    const user = await getUser();
-    if (user?.user_metadata.role == 'student') {
-      return NextResponse.redirect(new URL('/study', request.url))
-    }
+  if (!user) {
+    void updateSession(request)
+    return NextResponse.redirect(new URL('/sign-in', request.url))
+  }
+
+  if (request.nextUrl.pathname.startsWith('/teach') && user.user_metadata.role == 'student') {
+    void updateSession(request)
+    return NextResponse.redirect(new URL('/study', request.url))
   }
   return await updateSession(request);
 }
@@ -23,6 +27,6 @@ export const config = {
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
      * Feel free to modify this pattern to include more paths.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sign-in|sign-up|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
