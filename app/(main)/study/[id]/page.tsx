@@ -42,6 +42,7 @@ const LearnPage = async ({ params }: { params: { id: string } }) => {
             lessons={unit.quizzes}
             activeLesson={courseProgress.activeLesson}
             activeLessonPercentage={lessonPercentage}
+            numberOfQuizzes={unit.numOfQuizzes}
           />
         ))}
       </FeedWrapper>

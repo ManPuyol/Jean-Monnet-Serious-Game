@@ -1,5 +1,5 @@
 import { pgTable, foreignKey, pgEnum, integer, uuid, serial, varchar, timestamp, boolean, smallint, text, unique, primaryKey } from "drizzle-orm/pg-core"
-import { relations, sql } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
