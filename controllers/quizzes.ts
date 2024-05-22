@@ -9,29 +9,29 @@ import { UUID } from "crypto";
 import { eq, and, count, gt, gte } from "drizzle-orm";
 
 export const addQuiz = async (quiz: InsertQuiz) => {
-    await db
+  await db
     .insert(quizzes)
     .values(quiz);
 };
 
 export const allQuizzes = async () => {
-    const data = await db
+  const data = await db
     .select()
     .from(quizzes);
 
-    return data;
+  return data;
 };
 
 export const deleteQuiz = async (id: number) => {
   await db
-  .delete(quizzes)
-  .where(
-    eq(quizzes.id, id)
-  );
+    .delete(quizzes)
+    .where(
+      eq(quizzes.id, id)
+    );
 };
 
 export const updateQuiz = async (id: number, quiz: InsertQuiz) => {
-    await db
+  await db
     .update(quizzes)
     .set({
       ...quiz,
@@ -42,118 +42,131 @@ export const updateQuiz = async (id: number, quiz: InsertQuiz) => {
     );
 };
 
-export const getActiveQuizzes = async (userId : UUID, subjectID: number) => {
-    const data = await db
+export const getActiveQuizzes = async (userId: UUID, subjectID: number) => {
+  const data = await db
     .select({
-        unit : {
-            id : units.id,
-            description : units.description,
-            name : units.name
-        },
-        quiz : quizzes
+      unit: {
+        id: units.id,
+        description: units.description,
+        name: units.name
+      },
+      quiz: quizzes
     })
     .from(units)
     .where(eq(units.subjectId, subjectID))
     .leftJoin(quizzes, eq(units.id, quizzes.unitId))
 
-    const result = data.reduce<Record<number, { unit: Unit; quizzes: Quiz[] }>>(
-        (acc, row) => {
-          const unit = row.unit;
-          const quiz = row.quiz;
-          if (!acc[unit.id]) {
-            //@ts-ignore
-            acc[unit.id] = { unit, quizzes: [] };
-          }
-          if (quiz) {
-            acc[unit.id].quizzes.push(quiz);
-          }
-          return acc;
-        },
-        {}
-      );
-    
-    return result;
-}
-
-export const getCountQuizzes = async (userId : UUID) => {
-    const data = await db
-    .select(
-        {count: count()}
-    )
-    .from(quizzes)
-    .where(
-      eq(quizzes.userId, userId),
-    );
-
-    return data;
-}
-
-export const getCountQuizzesAbovePercentage = async (userId : UUID, percentage : number) => {
-    const data = await db
-    .select(
-        {count: count()}
-    )
-    .from(quizzes)
-    .where(
-        and(
-            eq(quizzes.userId, userId),
-            gt(quizzes.score, percentage)
-        )
-    );
-
-    return data;
-}
-
-export const getCountQuizzesPassed = async (userId : UUID) => {
-    const PERCENTAGE_TO_PASS_EXAM = 70;
-    const data = await getCountQuizzesAbovePercentage(userId, PERCENTAGE_TO_PASS_EXAM);
-    return data;
-}
-
-export const getQuiz = async (userId : UUID, quizId : number) => {
-
-  const data = await db
-  .select()
-  .from(quizzes)
-  .where(
-    and(
-      eq(quizzes.userId, userId),
-      eq(quizzes.id, quizId)
-    )
+  const result = data.reduce<Record<number, { unit: Unit; quizzes: Quiz[] }>>(
+    (acc, row) => {
+      const unit = row.unit;
+      const quiz = row.quiz;
+      if (!acc[unit.id]) {
+        //@ts-ignore
+        acc[unit.id] = { unit, quizzes: [] };
+      }
+      if (quiz) {
+        acc[unit.id].quizzes.push(quiz);
+      }
+      return acc;
+    },
+    {}
   );
 
-  return data; //devuelve quiz de momento, hay que retornar tambien las preguntas de ese quiz
+  return result;
+}
+
+export const getCountQuizzes = async (userId: UUID) => {
+  const data = await db
+    .select(
+      { count: count() }
+    )
+    .from(quizzes)
+    .where(
+      eq(quizzes.userId, userId),
+    );
+
+  return data;
+}
+
+export const getCountQuizzesAbovePercentage = async (userId: UUID, percentage: number) => {
+  const data = await db
+    .select(
+      { count: count() }
+    )
+    .from(quizzes)
+    .where(
+      and(
+        eq(quizzes.userId, userId),
+        gt(quizzes.score, percentage)
+      )
+    );
+
+  return data;
+}
+
+export const getCountQuizzesPassed = async (userId: UUID) => {
+  const PERCENTAGE_TO_PASS_EXAM = 70;
+  const data = await getCountQuizzesAbovePercentage(userId, PERCENTAGE_TO_PASS_EXAM);
+  return data;
+}
+
+export const getQuiz = async (quizId: number) => {
+
+  const data = await db.query.quizzes.findFirst({
+    where: (quizzes, { eq }) => (and(
+      eq(quizzes.id, quizId),
+    )),
+    columns: {},
+    with: {
+      quizDetails: {
+        columns: {},
+        with: {
+          question: {
+            columns: { question: true, hard: true },
+            with: {
+              answers: {
+                columns: { name: true, correct: true }
+              }
+            }
+          }
+        }
+      },
+    }
+
+  })
+
+  return data?.quizDetails;
 
 }
 
-export const submitQuiz = async (allQuizzesAnswers : QuizAnswers[]) => {
+export const submitQuiz = async (allQuizzesAnswers: QuizAnswers[]) => {
   try {
-    for (const singularQuiz of allQuizzesAnswers){
+    for (const singularQuiz of allQuizzesAnswers) {
       await db
-      .update(quizDetails)
-      .set({ correct : singularQuiz.correct})
-      .where(
-        and(
-          eq(quizDetails.userId, singularQuiz.userId),
-          eq(quizDetails.questionId, singularQuiz.questionId)
-        )
-      );
+        .update(quizDetails)
+        .set({ correct: singularQuiz.correct })
+        .where(
+          and(
+            eq(quizDetails.userId, singularQuiz.userId),
+            eq(quizDetails.questionId, singularQuiz.questionId)
+          )
+        );
     }
   } catch (error) {
     console.error("Error updating quiz details");
   }
 }
 
-export const updateScore = async (userId : UUID, newScore : number, quizId : number) => {
+export const updateScore = async (userId: UUID, newScore: number, quizId: number) => {
   const data = await db
-  .update(quizzes)
-  .set({score: newScore})
-  .where(
-    and (
-      eq(quizzes.userId, userId),
-      eq(quizzes.id, quizId)
-    ) 
-  );
+    .update(quizzes)
+    .set({ score: newScore })
+    .where(
+      and(
+        eq(quizzes.userId, userId),
+        eq(quizzes.id, quizId)
+      )
+    );
 
   return data;
 }
