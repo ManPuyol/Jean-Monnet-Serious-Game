@@ -1,8 +1,12 @@
+import { getQuiz } from '@/controllers/quizzes'
 import React from 'react'
+import { Quiz } from './Quiz';
 
-export default function page() {
+export default async function page({ params }: { params: { id: number } }) {
+  const quizData = await getQuiz(params.id);
   return (
-    <div>page</div>
+    <>
+    <Quiz questions={quizData!}/>
+    </>
   )
 }
-

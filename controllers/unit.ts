@@ -3,7 +3,7 @@ import { quizzes } from "@/drizzle/schema";
 import { InsertUnit, units } from "@/schemas/units";
 import { db } from "@/utils/drizzle/db";
 import { UUID } from "crypto";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 export const addUnit = async (unit: InsertUnit) => {
   await db
@@ -47,6 +47,7 @@ export const getActiveUnits = async (subjectId: number, userId: UUID) => {
       eq(units.subjectId, subjectId),
       eq(units.active, true)
     )),
+    extras: {numOfQuizzes: sql<number>`get_number_of_quizzes(${units.id})`.as('noQ'),},
     with: {
       quizzes: {
         where: (quiz, { eq }) => eq(quiz.userId, userId),

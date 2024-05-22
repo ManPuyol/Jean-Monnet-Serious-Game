@@ -5,36 +5,8 @@ import Test from './Test';
 import { QuizResults } from './QuizResults';
 
 
-export function Quiz() {
-  const questions: Question[] = [
-    {
-      id: 1,
-      unitId: 1,
-      question: 'What is the capital of France?',
-      hard: false,
-      active: true,
-      createdAt: '',
-      updatedAt: '',
-    },
-    {
-      id: 2,
-      unitId: 1,
-      question: 'What is the capital of Germany?',
-      hard: false,
-      active: true,
-      createdAt: '',
-      updatedAt: '',
-    },
-    {
-      id: 3,
-      unitId: 1,
-      question: 'What is the capital of Spain?',
-      hard: false,
-      active: true,
-      createdAt: '',
-      updatedAt: '',
-    },
-  ];
+export function Quiz({ questions }: {questions : any[]}) {
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<any>([]);
 
@@ -52,36 +24,11 @@ export function Quiz() {
     <>
       {currentQuestion < questions.length ? (
         <Test
-          question={questions[currentQuestion].question}
+          question={questions[currentQuestion].question.question}
           setCurrentQuestion={setCurrentQuestion}
           setAnswers={setAnswers}
           progress={(currentQuestion * 100) / questions.length}
-          answers={[
-            {
-              id: 1,
-              name: 'a',
-              createdAt: '',
-              updatedAt: '',
-              questionId: 1,
-              correct: true,
-            },
-            {
-              id: 2,
-              name: 'b',
-              createdAt: '',
-              updatedAt: '',
-              questionId: 1,
-              correct: false,
-            },
-            {
-              id: 3,
-              name: 'c',
-              createdAt: '',
-              updatedAt: '',
-              questionId: 1,
-              correct: false,
-            },
-          ].sort(() => Math.random() - 0.5)} />
+          answers={questions[currentQuestion].question.answers}/>
       ) : (
         <QuizResults getScore={getScore} />
       )}
