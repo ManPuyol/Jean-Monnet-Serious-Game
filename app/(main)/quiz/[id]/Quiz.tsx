@@ -28,7 +28,7 @@ export function Quiz({ questions }: {questions : any[]}) {
           setCurrentQuestion={setCurrentQuestion}
           setAnswers={setAnswers}
           progress={(currentQuestion * 100) / questions.length}
-          answers={questions[currentQuestion].question.answers}/>
+          answers={questions[currentQuestion].question.answers.sort(() => Math.random() - 0.5)}/>
       ) : (
         <QuizResults getScore={getScore} />
       )}
