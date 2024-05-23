@@ -57,3 +57,25 @@ export const getActiveUnits = async (subjectId: number, userId: UUID) => {
 
   return data;
 }
+
+export const getQuestionsAndAnswers = async (unitId : number) => {
+  const data = await db.query.units.findFirst({
+    where: (units, { eq }) => (and(
+      eq(units.id, unitId),
+    )),
+    columns: {},
+    with: {
+      questions: {
+        columns: { question: true, hard: true },
+        with: {
+          answers: {
+            columns: { name: true, correct: true }
+          }
+        }
+      },
+    }
+
+  })
+
+  return data;
+}

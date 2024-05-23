@@ -91,6 +91,7 @@ export const units = pgTable("units", {
 
 export const unitsRelations = relations(units, ({ many }) => ({
 	quizzes: many(quizzes),
+	questions: many(questions),
 }));
 
 export const questions = pgTable("questions", {
@@ -112,9 +113,13 @@ export const answers = pgTable("answers", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
-export const questionRelations = relations(questions, ({ many }) => ({
+export const questionRelations = relations(questions, ({ one, many }) => ({
 	answers: many(answers),
-	quizDetails: many(quizDetails)
+	quizDetails: many(quizDetails),
+	unit: one(units, {
+		fields: [questions.unitId],
+		references: [units.id],
+	}),
 }));
 
 export const answersRelations = relations(answers, ({ one }) => ({
