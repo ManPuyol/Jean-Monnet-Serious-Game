@@ -25,6 +25,7 @@ import { toast } from '@/components/ui/use-toast';
 import { deleteUnit, updateUnit } from '@/controllers/unit';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const columns: ColumnDef<Unit>[] = [
   {
@@ -82,7 +83,9 @@ const columns: ColumnDef<Unit>[] = [
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <Link href={`/build/${row.original.subjectId}/${row.original.id}/`}>
                 <DropdownMenuItem>View questions</DropdownMenuItem>
+                </Link>
                 <DialogTrigger asChild>
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                 </DialogTrigger>
@@ -99,7 +102,7 @@ const columns: ColumnDef<Unit>[] = [
                 </DialogDescription>
               </DialogHeader>
               <UnitForm
-                subjectId={Number(row.original.id)}
+                subjectId={Number(row.original.subjectId)}
                 defaultName={row.original.name}
                 defaultDescription={row.original.description}
                 defaultQuestionsPerQuiz={row.original.questionsPerQuiz}
