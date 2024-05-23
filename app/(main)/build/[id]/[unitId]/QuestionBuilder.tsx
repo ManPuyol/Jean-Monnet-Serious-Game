@@ -3,12 +3,24 @@ import QuestionForm from './questionForm';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarQuestions } from './SidebarQuestions';
 import { useState } from 'react';
+import { toast } from '@/components/ui/use-toast';
 
 export function QuestionBuilder({ questions }: { questions: any[] }) {
   const [questionState, setQuestionState] = useState(questions);
   const [activeQuestion, setActiveQuestion] = useState(0);
 
   const addNewQuestion = () => {
+    // Ensure all questions have ids
+    if (!questionState.every(question => question.id !== undefined)) {
+      setActiveQuestion(questionState.length -1); // Set active question to the last one
+      toast({
+        title: 'Hey!',
+        variant: 'destructive',
+        description: 'Submit the new question before adding a new one.',
+      });
+      return;
+    }
+
     const newQuestion = { question: '', answers: [] }; // Adjust this to fit the structure of your questions
     setQuestionState([...questionState, newQuestion]);
     setActiveQuestion(questionState.length); // Set active question to the last one
