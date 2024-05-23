@@ -37,9 +37,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOutLink />
-                </DropdownMenuItem>
+                <LogOutLink />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

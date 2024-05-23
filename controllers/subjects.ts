@@ -40,7 +40,7 @@ export const deleteSubject = async (id: number) => {
 };
 
 export const updateSubject = async (id: number, subject: InsertSubject) => {
-  await db
+  return await db
     .update(subjects)
     .set({
       ...subject,
@@ -48,7 +48,7 @@ export const updateSubject = async (id: number, subject: InsertSubject) => {
     })
     .where(
       eq(subjects.id, id)
-    );
+    ).returning({ id: subjects.id });
 };
 
 export const getSubjects = async (userId: UUID): Promise<Subject[]> => {
