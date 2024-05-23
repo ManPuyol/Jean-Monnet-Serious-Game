@@ -1,4 +1,5 @@
 "use server";
+import { quizAnswers } from "@/app/(main)/quiz/[id]/Quiz";
 import { quizDetails } from "@/drizzle/schema";
 import { QuizAnswers } from "@/interfaces/quizAnswers";
 import { InsertQuiz, quizzes, Quiz } from "@/schemas/quizzes";
@@ -139,15 +140,16 @@ export const getQuiz = async (quizId: number) => {
 
 }
 
-export const submitQuiz = async (allQuizzesAnswers: QuizAnswers[]) => {
+export const submitQuiz = async (allQuizzesAnswers: quizAnswers) => {
+  console.log(allQuizzesAnswers);
   try {
-    for (const singularQuiz of allQuizzesAnswers) {
+    for (const singularQuiz of allQuizzesAnswers.results) {
       await db
         .update(quizDetails)
         .set({ correct: singularQuiz.correct })
         .where(
           and(
-            eq(quizDetails.userId, singularQuiz.userId),
+            eq(quizDetails.userId, allQuizzesAnswers.userId),
             eq(quizDetails.questionId, singularQuiz.questionId)
           )
         );
