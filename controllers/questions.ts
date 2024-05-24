@@ -47,13 +47,30 @@ export const updateQuestion = async (id: number, question: InsertQuestion) => {
 };
 
 export const disableQuestion = async (id: number) => {
-    await db
-      .update(questions)
-      .set({
-        active : false,
-        updatedAt: new Date().toDateString(),
-      })
-      .where(
-        eq(questions.id, id)
-      );
-  };
+  await db
+    .update(questions)
+    .set({
+      active : false,
+      updatedAt: new Date().toDateString(),
+    })
+    .where(
+      eq(questions.id, id)
+    );
+};
+
+export const getQuestionsFromUnit = async (unit_id : number) => {
+
+  const data = await db.query.questions.findMany({
+    where: (questions, { eq }) => (and(
+      eq(questions.unitId, unit_id),
+    )),
+    columns: {id : true, question : true},
+    with: {
+      answers: {
+        columns: { name: true, correct: true },
+      },
+    }
+  })
+
+  return data;
+}
