@@ -2,7 +2,7 @@ DROP TRIGGER IF EXISTS trigger_check_quiz_score_trigger ON quizzes;
 DROP FUNCTION IF EXISTS check_quiz_score();
 DROP FUNCTION IF EXISTS find_next_available_unit;
 
-CREATE OR REPLACE FUNCTION find_next_available_unit(current_unit_id INTEGER, user_id UUID) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION find_next_available_unit(in_current_unit_id INTEGER, in_user_id UUID) RETURNS INTEGER AS $$
 DECLARE
     next_unit_id INTEGER;
     current_subject_id INTEGER;
@@ -10,31 +10,31 @@ DECLARE
 BEGIN
     SELECT units.subject_id INTO current_subject_id
     FROM units
-    WHERE units.id = current_unit_id;
+    WHERE units.id = in_current_unit_id;
 
     SELECT COUNT(*) INTO question_available
     FROM questions
-    WHERE questions.unit_id = current_unit_id
+    WHERE questions.unit_id = in_current_unit_id
     AND questions.id NOT IN (
         SELECT quiz_details.question_id
         FROM quiz_details
         JOIN quizzes ON quiz_details.quiz_id = quizzes.id
-        WHERE quizzes.user_id = quiz_details.user_id
+        WHERE quizzes.user_id = in_user_id
     );
 
     IF question_available > 0 THEN
-        next_unit_id := current_unit_id;
+        next_unit_id := in_current_unit_id;
     ELSE
         SELECT units.id INTO next_unit_id
         FROM units
-        WHERE units.id > current_unit_id
+        WHERE units.id > in_current_unit_id
         AND units.active = true
         AND units.subject_id = current_subject_id
         AND NOT EXISTS (
             SELECT 1
             FROM quiz_details
             JOIN quizzes ON quiz_details.quiz_id = quizzes.id
-            WHERE quizzes.user_id = quiz_details.user_id
+            WHERE quizzes.user_id = in_user_id
             AND quiz_details.unit_id = units.id
         )
         ORDER BY units.id
