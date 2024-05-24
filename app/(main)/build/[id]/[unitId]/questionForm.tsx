@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input';
 import { Check, Trash2 } from 'lucide-react';
 
 const FormSchema = z.object({
+  id: z.number().optional(),
   question: z
     .string()
     .min(1, {
@@ -35,8 +36,8 @@ const FormSchema = z.object({
         correct: z.boolean().default(false),
       }),
     )
-    .min(3, {
-      message: 'Question must have at least 3 answers.',
+    .min(2, {
+      message: 'Question must have at least 2 answers.',
     }),
 });
 
@@ -52,6 +53,7 @@ export default function QuestionForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      id: questions[activeQuestion]?.id,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -69,6 +71,7 @@ export default function QuestionForm({
 
   useEffect(() => {
     form.reset({
+      id: questions[activeQuestion]?.id,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -85,14 +88,32 @@ export default function QuestionForm({
   };
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    if (!data.id) {
+      toast({
+        title: 'Question created successfully',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
+          </pre>
+        ),
+      });
+      //Create and get id
+      data.id = 90
+    } else {
+      toast({
+        title: 'Question updated successfully',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
+          </pre>
+        ),
+      });
+    }
+
+    questions[activeQuestion] = data;
+    setQuestions([...questions]);
   }
 
   return (
@@ -153,9 +174,9 @@ export default function QuestionForm({
                   <Button
                     className="relative top-[2rem]"
                     type="button"
-                    variant={fields.length <= 3 ? 'secondary' : 'destructive'}
+                    variant={fields.length <= 2 ? 'secondary' : 'destructive'}
                     size={'icon'}
-                    disabled={fields.length <= 3}
+                    disabled={fields.length <= 2}
                     onClick={() => remove(index)}
                   >
                     <Trash2 />
