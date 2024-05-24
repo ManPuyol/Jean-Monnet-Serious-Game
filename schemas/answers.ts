@@ -10,4 +10,5 @@ export const answers = pgTable("answers", {
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
 
-export type Answers = typeof answers.$inferSelect;
+export type Answer = typeof answers.$inferSelect;
+export type InsertAnswer = typeof answers.$inferInsert;
