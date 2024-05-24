@@ -15,7 +15,22 @@ export const allAnswers = async () => {
     .from(answers);
   return data;
 };
+export const questionAnswers = async (questionId: number) => {
+  return await db
+    .select()
+    .from(answers)
+    .where(
+      eq(answers.questionId, questionId)
+    );
+};
 
+export const deleteQuestionAnswers = async (questionId: number) => {
+  await db
+  .delete(answers)
+  .where(
+    eq(answers.questionId, questionId)
+  );
+};
 export const deleteAnswer = async (id: number) => {
   await db
   .delete(answers)
