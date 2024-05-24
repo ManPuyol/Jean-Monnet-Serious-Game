@@ -12,7 +12,6 @@ export default async function page({
       id: 1,
       question: '1 What is the capital of Nigeria?',
       answers: [{ name: 'Lagos', correct: false }, { name: 'Abuja', correct: true }, { name: 'Kano', correct: false }, { name: 'Ibadan', correct: false }]
-     
     },
     {
       id: 2,
@@ -23,7 +22,6 @@ export default async function page({
       id: 3,
       question: '3 What is the capital of South Africa?',
       answers: [{ name: 'Cape Town', correct: false }, { name: 'Johannesburg', correct: false }, { name: 'Pretoria', correct: true }, { name: 'Durban', correct: false }]
-      //answers: ['Cape Town', 'Johannesburg', 'Pretoria', 'Durban'],
     },
   ];
 
