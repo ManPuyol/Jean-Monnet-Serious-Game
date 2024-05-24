@@ -18,6 +18,7 @@ import { toast } from '@/components/ui/use-toast';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check, Trash2 } from 'lucide-react';
+import { addQuestionWithAnswers, updateQuestionWithAnswers } from '@/controllers/questions';
 
 const FormSchema = z.object({
   id: z.number().optional(),
@@ -87,20 +88,22 @@ export default function QuestionForm({
     append({ name: '', correct: false });
   };
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.id) {
+      const id = await addQuestionWithAnswers(data)
       toast({
         title: 'Question created successfully',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+            <code className="text-white">{JSON.stringify(id, null, 2)}</code>
             {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
           </pre>
         ),
       });
-      //Create and get id
-      data.id = 90
+      data.id = id
     } else {
+      //@ts-ignore
+      await updateQuestionWithAnswers(data)
       toast({
         title: 'Question updated successfully',
         description: (
@@ -120,7 +123,7 @@ export default function QuestionForm({
     <Form {...form}>
       <div className="flex justify-around">
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit((formData) => onSubmit(formData))}
           className="flex flex-col max-w-3xl w-full p-6 space-y-4"
         >
           <FormField

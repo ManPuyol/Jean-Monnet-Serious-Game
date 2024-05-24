@@ -2,11 +2,52 @@
 import { InsertQuestion, questions } from "@/schemas/questions";
 import { db } from "@/utils/drizzle/db";
 import { eq, and } from "drizzle-orm";
+import { addAnswer, deleteQuestionAnswers, questionAnswers } from "./answers";
+
+
+export const addQuestionWithAnswers = async ({ question, answers }: {
+  question: string;
+  answers: {
+    name: string;
+    correct: boolean;
+  }[];
+  id?: number | undefined;
+}) => {
+
+  const newQuestion = await addQuestion({ question: question })
+
+  for (const answer of answers) {
+    addAnswer({ ...answer, questionId: newQuestion[0].id })
+  };
+
+  return newQuestion[0].id
+}
+
+export const updateQuestionWithAnswers = async ({ question, answers, id }: {
+  question: string;
+  answers: {
+    name: string;
+    correct: boolean;
+  }[];
+  id: number;
+}) => {
+  // Update the question
+  await updateQuestion(id, { question: question });
+
+  // Delete all existing answers related to the question
+  await deleteQuestionAnswers(id)
+
+  // Add new answers
+  for (const answer of answers) {
+    addAnswer({ ...answer, questionId: id });
+  }
+}
 
 export const addQuestion = async (question: InsertQuestion) => {
-  await db
+  return await db
     .insert(questions)
-    .values(question);
+    .values(question)
+    .returning({ id: questions.id })
 };
 
 export const allquestions = async () => {
@@ -28,10 +69,10 @@ export const allActiveQuestions = async () => {
 
 export const deleteQuestion = async (id: number) => {
   await db
-  .delete(questions)
-  .where(
-    eq(questions.id, id)
-  );
+    .delete(questions)
+    .where(
+      eq(questions.id, id)
+    );
 };
 
 export const updateQuestion = async (id: number, question: InsertQuestion) => {
@@ -47,13 +88,13 @@ export const updateQuestion = async (id: number, question: InsertQuestion) => {
 };
 
 export const disableQuestion = async (id: number) => {
-    await db
-      .update(questions)
-      .set({
-        active : false,
-        updatedAt: new Date().toDateString(),
-      })
-      .where(
-        eq(questions.id, id)
-      );
-  };
+  await db
+    .update(questions)
+    .set({
+      active: false,
+      updatedAt: new Date().toDateString(),
+    })
+    .where(
+      eq(questions.id, id)
+    );
+};
