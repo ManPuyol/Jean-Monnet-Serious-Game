@@ -117,7 +117,7 @@ export const getQuiz = async (quizId: number) => {
     where: (quizzes, { eq }) => (and(
       eq(quizzes.id, quizId),
     )),
-    columns: {},
+    columns: {score: true},
     with: {
       quizDetails: {
         columns: {},
@@ -126,7 +126,7 @@ export const getQuiz = async (quizId: number) => {
             columns: { question: true, hard: true },
             with: {
               answers: {
-                columns: { name: true, correct: true }
+                columns: { questionId: true, name: true, correct: true }
               }
             }
           }
@@ -136,27 +136,39 @@ export const getQuiz = async (quizId: number) => {
 
   })
 
-  return data?.quizDetails;
+  return data;
 
 }
 
-export const submitQuiz = async (allQuizzesAnswers: quizAnswers) => {
-  console.log(allQuizzesAnswers);
-  try {
-    for (const singularQuiz of allQuizzesAnswers.results) {
+export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number, previousScore : number, quizId : number) => {
+
+  if (score > previousScore || previousScore == null){
+    try {
+      
       await db
-        .update(quizDetails)
-        .set({ correct: singularQuiz.correct })
+        .update(quizzes)
+        .set({score: score})
         .where(
-          and(
-            eq(quizDetails.userId, allQuizzesAnswers.userId),
-            eq(quizDetails.questionId, singularQuiz.questionId)
-          )
-        );
+          eq(quizzes.id, quizId)
+        )
+
+      for (const singularQuiz of allQuizzesAnswers.results) {
+        await db
+          .update(quizDetails)
+          .set({ correct: singularQuiz.correct })
+          .where(
+            and(
+              eq(quizDetails.userId, allQuizzesAnswers.userId),
+              eq(quizDetails.questionId, singularQuiz.questionId)
+            )
+          );
+      }
+
+    } catch (error) {
+      console.error("Error updating quiz details");
     }
-  } catch (error) {
-    console.error("Error updating quiz details");
   }
+ 
 }
 
 export const updateScore = async (userId: UUID, newScore: number, quizId: number) => {

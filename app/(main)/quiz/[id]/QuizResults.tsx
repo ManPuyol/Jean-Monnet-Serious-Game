@@ -56,7 +56,7 @@ export function QuizResults({ getScore }: { getScore: Function; }) {
           Try again
         </Button>
         <Button
-          onClick={() => router.back()}
+          onClick={() => { router.back(); router.refresh() }}
           variant="secondary"
           className="py-2 px-4"
         >

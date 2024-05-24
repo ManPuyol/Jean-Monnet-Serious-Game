@@ -42,7 +42,7 @@ export const Unit = ({
                   id={lesson.id}
                   index={index + 1}
                   totalCount={numberOfQuizzes}
-                  current={lesson.score === null} //lesson.id === activeLesson.id}
+                  current={lesson.score === null || lesson.score < 70} //lesson.id === activeLesson.id}
                   locked={false} //lesson.id !== activeLesson.id}
                   percentage={activeLessonPercentage}
                 />

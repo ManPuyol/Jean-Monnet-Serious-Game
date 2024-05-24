@@ -8,36 +8,32 @@ import { submitQuiz } from '@/controllers/quizzes';
 import { getUser } from '@/lib/utils';
 
 export type quizAnswers = {
-  userId : string,
-  results : {
-    questionId : number,
-    correct : boolean,
+  userId: string,
+  results: {
+    questionId: number,
+    correct: boolean,
   }[]
 }
 
-const submitResults = async (answers : any) => {
-  const user = await getUser();
-  console.log(user, answers)
+const submitResults = async (answers: any, user: any, score : number, previousScore : number, quizId : number) => {
 
   const query : quizAnswers = {
     userId : user!.id,
     results : answers,
   }
 
-  submitQuiz(query);
+  submitQuiz(query, score, previousScore, quizId);
 
 }
 
-export function Quiz({ questions }: {questions : any[]}) {
+export function Quiz({ questions , user , previousScore, quizId}: { questions: any[] , user: any , previousScore : any, quizId : number}) {
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<any>([]);
 
   useEffect(() => {
-    
     if (currentQuestion >= questions.length) {
-      console.log("AAAAAAAAAAAAAAA")
-      submitResults(answers);
+      void submitResults(answers, user, getScore() , previousScore, quizId);
     }
   }, [answers]);
 
@@ -59,7 +55,7 @@ export function Quiz({ questions }: {questions : any[]}) {
           setCurrentQuestion={setCurrentQuestion}
           setAnswers={setAnswers}
           progress={(currentQuestion * 100) / questions.length}
-          answers={questions[currentQuestion].question.answers.sort(() => Math.random() - 0.5)}/>
+          answers={questions[currentQuestion].question.answers.sort(() => Math.random() - 0.5)} />
       ) : (
         <QuizResults getScore={getScore} />
       )}
