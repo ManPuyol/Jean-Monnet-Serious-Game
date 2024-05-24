@@ -18,7 +18,10 @@ import { toast } from '@/components/ui/use-toast';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check, Trash2 } from 'lucide-react';
-import { addQuestionWithAnswers, updateQuestionWithAnswers } from '@/controllers/questions';
+import {
+  addQuestionWithAnswers,
+  updateQuestionWithAnswers,
+} from '@/controllers/questions';
 
 const FormSchema = z.object({
   id: z.number().optional(),
@@ -43,10 +46,12 @@ const FormSchema = z.object({
 });
 
 export default function QuestionForm({
+  unitId,
   questions,
   setQuestions,
   activeQuestion,
 }: {
+  unitId: number;
   questions: any[];
   setQuestions: Dispatch<SetStateAction<any[]>>;
   activeQuestion: number;
@@ -90,7 +95,10 @@ export default function QuestionForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.id) {
-      const id = await addQuestionWithAnswers(data)
+      //@ts-ignore
+      data.unitId = unitId;
+      //@ts-ignore
+      const id = await addQuestionWithAnswers(data);
       toast({
         title: 'Question created successfully',
         description: (
@@ -100,10 +108,10 @@ export default function QuestionForm({
           </pre>
         ),
       });
-      data.id = id
+      data.id = id;
     } else {
       //@ts-ignore
-      await updateQuestionWithAnswers(data)
+      await updateQuestionWithAnswers(data);
       toast({
         title: 'Question updated successfully',
         description: (
@@ -123,24 +131,55 @@ export default function QuestionForm({
     <Form {...form}>
       <div className="flex justify-around">
         <form
-          onSubmit={form.handleSubmit((formData) => onSubmit(formData))}
+          onSubmit={form.handleSubmit(formData => onSubmit(formData))}
           className="flex flex-col max-w-3xl w-full p-6 space-y-4"
         >
           <FormField
             control={form.control}
             name="question"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Question</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Enter question"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <div className="flex flex-row items-start gap-4">
+                <FormItem className="flex-1">
+                  <FormLabel>Question</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      placeholder="Enter question"
+                      className="h-24 resize-none"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                <div className="flex flex-col items-start gap-4">
+                  <Button
+                    className="relative top-[2rem] text-xl"
+                    type="button"
+                    variant='outline'
+                    // variant={
+                    //   form.getValues().answers[index].correct
+                    //     ? 'success'
+                    //     : 'secondary'
+                    // }
+                    size={'icon'}
+                    // onClick={() => {
+                    //   const newAnswers = form.getValues().answers;
+                    //   newAnswers[index].correct = !newAnswers[index].correct;
+                    //   form.setValue('answers', newAnswers);
+                    // }}
+                  >
+                    {/* <Check /> */}🧠
+                  </Button>
+                  <Button
+                    className="relative top-[2rem]"
+                    type="button"
+                    variant={fields.length <= 2 ? 'secondary' : 'destructive'}
+                    size={'icon'}
+                    // onClick={() => remove(index)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              </div>
             )}
           />
           {fields.map((f, index) => (

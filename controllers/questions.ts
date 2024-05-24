@@ -5,16 +5,16 @@ import { eq, and } from "drizzle-orm";
 import { addAnswer, deleteQuestionAnswers, questionAnswers } from "./answers";
 
 
-export const addQuestionWithAnswers = async ({ question, answers }: {
+export const addQuestionWithAnswers = async ({ question, answers, unitId }: {
   question: string;
+  unitId: number;
   answers: {
     name: string;
     correct: boolean;
   }[];
   id?: number | undefined;
 }) => {
-
-  const newQuestion = await addQuestion({ question: question })
+  const newQuestion = await addQuestion({ question: question, unitId })
 
   for (const answer of answers) {
     addAnswer({ ...answer, questionId: newQuestion[0].id })
@@ -91,7 +91,7 @@ export const disableQuestion = async (id: number) => {
   await db
     .update(questions)
     .set({
-      active : false,
+      active: false,
       updatedAt: new Date().toDateString(),
     })
     .where(
@@ -99,13 +99,13 @@ export const disableQuestion = async (id: number) => {
     );
 };
 
-export const getQuestionsFromUnit = async (unit_id : number) => {
+export const getQuestionsFromUnit = async (unit_id: number) => {
 
   const data = await db.query.questions.findMany({
     where: (questions, { eq }) => (and(
       eq(questions.unitId, unit_id),
     )),
-    columns: {id : true, question : true},
+    columns: { id: true, question: true },
     with: {
       answers: {
         columns: { name: true, correct: true },
