@@ -11,8 +11,15 @@ import {
 import { ModeToggle } from '@/components/ModeToggle';
 import StudyLink from '@/components/StudyLink';
 import { LogOutLink } from '@/components/LogOutLink';
+import { getUser } from '@/lib/utils';
+import Link from 'next/link';
 
-export default function Dashboard({ children }: { children: React.ReactNode }) {
+export default async function Dashboard({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getUser();
   return (
     <div className="max-h-screen h-full overflow-clip w-full">
       <div className="flex flex-col h-full">
@@ -36,6 +43,16 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>Profile</DropdownMenuItem>
+                {user?.user_metadata.role == 'teacher' && (
+                  <>
+                    <Link href={'/teach'}>
+                      <DropdownMenuItem>Teach</DropdownMenuItem>
+                    </Link>
+                    <Link href={'/study'}>
+                      <DropdownMenuItem>Study</DropdownMenuItem>
+                    </Link>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <LogOutLink />
               </DropdownMenuContent>
