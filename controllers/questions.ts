@@ -5,16 +5,17 @@ import { eq, and } from "drizzle-orm";
 import { addAnswer, deleteQuestionAnswers, questionAnswers } from "./answers";
 
 
-export const addQuestionWithAnswers = async ({ question, answers }: {
+export const addQuestionWithAnswers = async ({ question, answers, hard, unitId }: {
   question: string;
+  hard: boolean;
+  unitId: number;
   answers: {
     name: string;
     correct: boolean;
   }[];
   id?: number | undefined;
 }) => {
-
-  const newQuestion = await addQuestion({ question: question })
+  const newQuestion = await addQuestion({ question: question, hard, unitId })
 
   for (const answer of answers) {
     addAnswer({ ...answer, questionId: newQuestion[0].id })
@@ -23,8 +24,9 @@ export const addQuestionWithAnswers = async ({ question, answers }: {
   return newQuestion[0].id
 }
 
-export const updateQuestionWithAnswers = async ({ question, answers, id }: {
+export const updateQuestionWithAnswers = async ({ question, answers, hard, id }: {
   question: string;
+  hard: boolean;
   answers: {
     name: string;
     correct: boolean;
@@ -32,7 +34,7 @@ export const updateQuestionWithAnswers = async ({ question, answers, id }: {
   id: number;
 }) => {
   // Update the question
-  await updateQuestion(id, { question: question });
+  await updateQuestion(id, { question: question, hard });
 
   // Delete all existing answers related to the question
   await deleteQuestionAnswers(id)
@@ -91,7 +93,7 @@ export const disableQuestion = async (id: number) => {
   await db
     .update(questions)
     .set({
-      active : false,
+      active: false,
       updatedAt: new Date().toDateString(),
     })
     .where(
@@ -99,13 +101,13 @@ export const disableQuestion = async (id: number) => {
     );
 };
 
-export const getQuestionsFromUnit = async (unit_id : number) => {
+export const getQuestionsFromUnit = async (unit_id: number) => {
 
   const data = await db.query.questions.findMany({
     where: (questions, { eq }) => (and(
       eq(questions.unitId, unit_id),
     )),
-    columns: {id : true, question : true},
+    columns: { id: true, question: true },
     with: {
       answers: {
         columns: { name: true, correct: true },
