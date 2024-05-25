@@ -1,6 +1,7 @@
 import { getUser } from '@/lib/utils';
 import SubjectSelectionCard from './SubjectSelectionCard';
 import { redirect } from 'next/navigation';
+import { updateAchievementsState } from '@/controllers/achievements';
 
 export default async function Study() {
   // const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
@@ -37,6 +38,9 @@ export default async function Study() {
     redirect('/sign-in');
     return;
   }
+
+  const aa = await updateAchievementsState();
+  console.log(aa)
 
   return <SubjectSelectionCard user={user!} />;
 }

@@ -8,40 +8,41 @@ import { db } from "@/utils/drizzle/db";
 import { UUID } from "crypto";
 
 import { eq, and, count, gt, gte } from "drizzle-orm";
+import { updateAchievementsState } from "./achievements";
 
-export const addQuiz = async (quiz: InsertQuiz) => {
-  await db
-    .insert(quizzes)
-    .values(quiz);
-};
+// export const addQuiz = async (quiz: InsertQuiz) => {
+//   await db
+//     .insert(quizzes)
+//     .values(quiz);
+// };
 
-export const allQuizzes = async () => {
-  const data = await db
-    .select()
-    .from(quizzes);
+// export const allQuizzes = async () => {
+//   const data = await db
+//     .select()
+//     .from(quizzes);
 
-  return data;
-};
+//   return data;
+// };
 
-export const deleteQuiz = async (id: number) => {
-  await db
-    .delete(quizzes)
-    .where(
-      eq(quizzes.id, id)
-    );
-};
+// export const deleteQuiz = async (id: number) => {
+//   await db
+//     .delete(quizzes)
+//     .where(
+//       eq(quizzes.id, id)
+//     );
+// };
 
-export const updateQuiz = async (id: number, quiz: InsertQuiz) => {
-  await db
-    .update(quizzes)
-    .set({
-      ...quiz,
-      updatedAt: new Date().toDateString(),
-    })
-    .where(
-      eq(quizzes.id, id)
-    );
-};
+// export const updateQuiz = async (id: number, quiz: InsertQuiz) => {
+//   await db
+//     .update(quizzes)
+//     .set({
+//       ...quiz,
+//       updatedAt: new Date().toDateString(),
+//     })
+//     .where(
+//       eq(quizzes.id, id)
+//     );
+// };
 
 export const getActiveQuizzes = async (userId: UUID, subjectID: number) => {
   const data = await db
@@ -76,41 +77,6 @@ export const getActiveQuizzes = async (userId: UUID, subjectID: number) => {
   return result;
 }
 
-export const getCountQuizzes = async (userId: UUID) => {
-  const data = await db
-    .select(
-      { count: count() }
-    )
-    .from(quizzes)
-    .where(
-      eq(quizzes.userId, userId),
-    );
-
-  return data;
-}
-
-export const getCountQuizzesAbovePercentage = async (userId: UUID, percentage: number) => {
-  const data = await db
-    .select(
-      { count: count() }
-    )
-    .from(quizzes)
-    .where(
-      and(
-        eq(quizzes.userId, userId),
-        gt(quizzes.score, percentage)
-      )
-    );
-
-  return data;
-}
-
-export const getCountQuizzesPassed = async (userId: UUID) => {
-  const PERCENTAGE_TO_PASS_EXAM = 70;
-  const data = await getCountQuizzesAbovePercentage(userId, PERCENTAGE_TO_PASS_EXAM);
-  return data;
-}
-
 export const getQuiz = async (quizId: number) => {
 
   const data = await db.query.quizzes.findFirst({
@@ -143,14 +109,9 @@ export const getQuiz = async (quizId: number) => {
 export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number, previousScore : number, quizId : number) => {
 
   if (score > previousScore || previousScore == null){
+
     try {
-      
-      await db
-        .update(quizzes)
-        .set({score: score})
-        .where(
-          eq(quizzes.id, quizId)
-        )
+      await updateScore(score, quizId);
 
       for (const singularQuiz of allQuizzesAnswers.results) {
         await db
@@ -164,6 +125,8 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
           );
       }
 
+      await updateAchievementsState();
+
     } catch (error) {
       console.error("Error updating quiz details");
     }
@@ -171,16 +134,14 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
  
 }
 
-export const updateScore = async (userId: UUID, newScore: number, quizId: number) => {
+export const updateScore = async (newScore: number, quizId: number) => {
   const data = await db
     .update(quizzes)
     .set({ score: newScore })
     .where(
-      and(
-        eq(quizzes.userId, userId),
         eq(quizzes.id, quizId)
-      )
     );
+
 
   return data;
 }
