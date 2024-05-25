@@ -1,47 +1,64 @@
 import { db } from "@/utils/drizzle/db";
 import { achievements, userAchievement, users } from "@/drizzle/schema";
-import { eq, inArray, min, notInArray, sql } from "drizzle-orm";
-import { UUID } from "crypto";
+import { eq, min, notInArray, sql } from "drizzle-orm";
 import { getUser } from "@/lib/utils";
-import { NextResponse } from "next/server";
 import { getUserStats } from "./profiles";
-
-enum Achievements_Types {
-    QUIZZES_DONE = 1,
-    QUIZZES_PASSED = 2,
-    QUIZZES_PERFECT = 3,
-}
-
 
 export const updateAchievementsState = async () => {
 
     const user = await getUser();
 
     if (!user){
-        NextResponse.json("Missing user");
+        console.log("Missing user")
     }
-    
-    const closestAchievements = await getClosestAchievements(user);
-    const userStats = await getUserStats();
 
-    for (const achievement of closestAchievements){
-        if (achievement.type == Achievements_Types.QUIZZES_DONE){
-            checkIfItCanGainAchievement(achievement.threshold, userStats.quizzesDone)
-        } else if (achievement.type == Achievements_Types.QUIZZES_PASSED){
-            checkIfItCanGainAchievement(achievement.threshold, userStats.quizzesPassed)
-        }
+    const query = sql`
+    SELECT achievements.id, achievements.name, achievements.description, achievements.type
+    FROM ((
+    view_counter_achievements
+    CROSS JOIN achievements
+    )
+    LEFT OUTER JOIN user_achievement ON (
+        achievements.id = user_achievement.achievement_id
+        AND view_counter_achievements.user_id = user_achievement."user_Id"
+    )
+    )
+    WHERE view_counter_achievements.user_id = '2b9c3b78-c680-4667-a67f-73fee79e84a6'
+    AND (user_achievement.achievement_id IS NULL)
+    AND ((
+        quizzes_done >= threshold)
+        AND ( type = 1 )
+        OR ((quizzes_passed >= threshold)
+        AND ( type = 2)
+        )
+        OR ((quizzes_perfect >= threshold)
+        AND (type = 3)
+        )
+    )`;
+
+    const result = await db.execute(query);
+
+    for (const each of result){
+        await db
+        .insert(userAchievement)
+        //@ts-ignore
+        .currents({userId: user!.id, achievementId: each.id});
     }
+
+    return result;
 
 }
 
-export const checkIfItCanGainAchievement = async (currentNumber : any, numberToReach : any) => {
+export const getClosestAchievements = async () => {
+    const user = await getUser();
 
-}
+    if (!user){
+        console.log("Missing user")
+    }
 
-export const getClosestAchievements = async (user : any) => {
     const subQuery = db.select({ achievementId: userAchievement.achievementId })
     .from(userAchievement)
-    .where(eq(userAchievement.userId, user.id));
+    .where(eq(userAchievement.userId, user!.id));
 
     const remainingAchievements = await db
     .select({
@@ -53,8 +70,40 @@ export const getClosestAchievements = async (user : any) => {
     .groupBy(achievements.type)
     .orderBy(achievements.type);
 
-    console.log(remainingAchievements);
-    //de los remaining achievements hay que sacar los que tengan el treshold menor y 1 de cada tipo
+    const stats = await getUserStats();
 
-    return remainingAchievements;
+    const { quizzesDone, quizzesPassed, quizzesPerfect } = stats[0];
+
+    // const resultArray = remainingAchievements.map(item => {
+    //   let current;
+    //   switch (item.type) {
+    //     case 1:
+    //       current = quizzesDone;
+    //       break;
+    //     case 2:
+    //       current = quizzesPassed;
+    //       break;
+    //     case 3:
+    //       current = quizzesPerfect;
+    //       break;
+    //     default:
+    //       current = 0;
+    //   }
+    //   return { type: item.type, threshold: item.threshold, current: current };
+    // });
+
+    const typeToValueMap = {
+        1: quizzesDone,
+        2: quizzesPassed,
+        3: quizzesPerfect
+    };
+
+    const resultArray = remainingAchievements.map(item => ({
+        type: item.type,
+        threshold: item.threshold,
+        //@ts-ignore
+        current: typeToValueMap[item.type] || 0
+    }));
+
+    return resultArray;
 }
