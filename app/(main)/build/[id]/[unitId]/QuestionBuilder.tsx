@@ -52,6 +52,7 @@ export function QuestionBuilder({
             unitId={unitId}
             questions={questionState}
             setQuestions={setQuestionState}
+            setActiveQuestion={setActiveQuestion}
             activeQuestion={activeQuestion}
           />
         </ScrollArea>

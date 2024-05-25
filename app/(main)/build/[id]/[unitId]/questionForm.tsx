@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -13,18 +12,27 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check, Trash2 } from 'lucide-react';
 import {
   addQuestionWithAnswers,
+  deleteQuestion,
   updateQuestionWithAnswers,
 } from '@/controllers/questions';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 const FormSchema = z.object({
   id: z.number().optional(),
+  hard: z.boolean().default(false),
   question: z
     .string()
     .min(1, {
@@ -49,17 +57,20 @@ export default function QuestionForm({
   unitId,
   questions,
   setQuestions,
+  setActiveQuestion,
   activeQuestion,
 }: {
   unitId: number;
   questions: any[];
   setQuestions: Dispatch<SetStateAction<any[]>>;
+  setActiveQuestion: Dispatch<SetStateAction<number>>;
   activeQuestion: number;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: questions[activeQuestion]?.id,
+      hard: questions[activeQuestion]?.hard ?? false,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -70,6 +81,8 @@ export default function QuestionForm({
           ],
     },
   });
+
+  const [hard, setHard] = useState(questions[activeQuestion]?.hard ?? false);
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'answers',
@@ -78,6 +91,7 @@ export default function QuestionForm({
   useEffect(() => {
     form.reset({
       id: questions[activeQuestion]?.id,
+      hard: questions[activeQuestion]?.hard ?? false,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -87,7 +101,8 @@ export default function QuestionForm({
             { name: '', correct: false },
           ],
     });
-  }, [activeQuestion]);
+    setHard(questions[activeQuestion]?.hard ?? false);
+  }, [activeQuestion, questions]);
 
   const addAnswer = () => {
     append({ name: '', correct: false });
@@ -104,7 +119,6 @@ export default function QuestionForm({
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{JSON.stringify(id, null, 2)}</code>
-            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
           </pre>
         ),
       });
@@ -117,7 +131,6 @@ export default function QuestionForm({
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
           </pre>
         ),
       });
@@ -151,33 +164,49 @@ export default function QuestionForm({
                   <FormMessage />
                 </FormItem>
                 <div className="flex flex-col items-start gap-4">
-                  <Button
-                    className="relative top-[2rem] text-xl"
-                    type="button"
-                    variant='outline'
-                    // variant={
-                    //   form.getValues().answers[index].correct
-                    //     ? 'success'
-                    //     : 'secondary'
-                    // }
-                    size={'icon'}
-                    // onClick={() => {
-                    //   const newAnswers = form.getValues().answers;
-                    //   newAnswers[index].correct = !newAnswers[index].correct;
-                    //   form.setValue('answers', newAnswers);
-                    // }}
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="relative top-[2rem] text-xl"
+                          type="button"
+                          variant="outline"
+                          size={'icon'}
+                          onClick={() => {
+                            const newDifficulty = !form.getValues().hard;
+                            form.setValue('hard', newDifficulty);
+                            setHard(newDifficulty);
+                          }}
+                        >
+                          {hard ? '🧠' : '🙂'}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent sideOffset={10} side="top">
+                        {hard ? 'Hard' : 'Normal'}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <ConfirmDialog
+                    onConfirm={() => {
+                      deleteQuestion(questions[activeQuestion].id);
+                      setQuestions(
+                        questions.filter(
+                          q => q.id !== questions[activeQuestion].id,
+                        ),
+                      );
+                      setActiveQuestion(0);
+                    }}
                   >
-                    {/* <Check /> */}🧠
-                  </Button>
-                  <Button
-                    className="relative top-[2rem]"
-                    type="button"
-                    variant={fields.length <= 2 ? 'secondary' : 'destructive'}
-                    size={'icon'}
-                    // onClick={() => remove(index)}
-                  >
-                    <Trash2 />
-                  </Button>
+                    <Button
+                      className="relative top-[2rem]"
+                      type="button"
+                      variant="destructive"
+                      size={'icon'}
+                      disabled={!questions[activeQuestion]?.id}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </ConfirmDialog>
                 </div>
               </div>
             )}

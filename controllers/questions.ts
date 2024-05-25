@@ -5,8 +5,9 @@ import { eq, and } from "drizzle-orm";
 import { addAnswer, deleteQuestionAnswers, questionAnswers } from "./answers";
 
 
-export const addQuestionWithAnswers = async ({ question, answers, unitId }: {
+export const addQuestionWithAnswers = async ({ question, answers, hard, unitId }: {
   question: string;
+  hard: boolean;
   unitId: number;
   answers: {
     name: string;
@@ -14,7 +15,7 @@ export const addQuestionWithAnswers = async ({ question, answers, unitId }: {
   }[];
   id?: number | undefined;
 }) => {
-  const newQuestion = await addQuestion({ question: question, unitId })
+  const newQuestion = await addQuestion({ question: question, hard, unitId })
 
   for (const answer of answers) {
     addAnswer({ ...answer, questionId: newQuestion[0].id })
@@ -23,8 +24,9 @@ export const addQuestionWithAnswers = async ({ question, answers, unitId }: {
   return newQuestion[0].id
 }
 
-export const updateQuestionWithAnswers = async ({ question, answers, id }: {
+export const updateQuestionWithAnswers = async ({ question, answers, hard, id }: {
   question: string;
+  hard: boolean;
   answers: {
     name: string;
     correct: boolean;
@@ -32,7 +34,7 @@ export const updateQuestionWithAnswers = async ({ question, answers, id }: {
   id: number;
 }) => {
   // Update the question
-  await updateQuestion(id, { question: question });
+  await updateQuestion(id, { question: question, hard });
 
   // Delete all existing answers related to the question
   await deleteQuestionAnswers(id)
