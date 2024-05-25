@@ -3,15 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Plus, Quote, Search } from 'lucide-react';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from '@/components/ui/command';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -29,8 +26,8 @@ export function SidebarQuestions({
   const [open, setOpen] = useState(false);
   return (
     <div className="flex-1 md:border-r pt-2">
-      <div className="px-3 py-2">
-        <div className="flex items-center pl-4 justify-between mb-2">
+      <div className=" py-2">
+        <div className="flex items-center pl-7 pr-3 justify-between mb-2">
           <h3 className="font-semibold text-lg tracking-tight">Questions</h3>
           <div className="flex gap-2">
             <Button
@@ -40,7 +37,7 @@ export function SidebarQuestions({
               onClick={() => setOpen(true)}
             >
               <Search className="h-4 w-4" />
-              <span className="sr-only">New question</span>
+              <span className="sr-only">Search</span>
             </Button>
             <Button
               size="icon"
@@ -72,7 +69,7 @@ export function SidebarQuestions({
           </div>
         </div>
         <ScrollArea className="h-[calc(100vh-120px)]">
-          <nav className="space-y-1 ">
+          <nav className="flex flex-col space-y-1 px-3 md:w-[220px] lg:w-[280px] ">
             {questions.map((question, index) => (
               <Button
                 key={index}
