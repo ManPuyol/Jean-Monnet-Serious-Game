@@ -42,7 +42,10 @@ export default async function Dashboard({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <Link href={'/profile'}>
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                </Link>
+
                 {user?.user_metadata.role == 'teacher' && (
                   <>
                     <Link href={'/teach'}>
