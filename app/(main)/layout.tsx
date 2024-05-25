@@ -13,12 +13,17 @@ import StudyLink from '@/components/StudyLink';
 import { LogOutLink } from '@/components/LogOutLink';
 import { getUser } from '@/lib/utils';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getUserNameInitials } from '@/controllers/profiles';
 
 export default async function Dashboard({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { nameInitials } = await getUserNameInitials();
+
+
   const user = await getUser();
   return (
     <div className="max-h-screen h-full overflow-clip w-full">
@@ -32,14 +37,10 @@ export default async function Dashboard({
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <CircleUser className="h-5 w-5" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
+                <Avatar className="cursor-pointer">
+                  <AvatarImage src="" />
+                  <AvatarFallback>{nameInitials}</AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <Link href={'/profile'}>
