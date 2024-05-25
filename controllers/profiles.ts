@@ -24,7 +24,7 @@ export const getDataForProfile = async () => {
     }
 }
 
-export const getDataForAchievements = async () => {
+export const getUserStats = async () => {
     const user = await getUser();
 
     if (!user){
