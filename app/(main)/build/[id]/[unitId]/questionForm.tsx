@@ -59,12 +59,14 @@ export default function QuestionForm({
   setQuestions,
   setActiveQuestion,
   activeQuestion,
+  addNewQuestion
 }: {
   unitId: number;
   questions: any[];
   setQuestions: Dispatch<SetStateAction<any[]>>;
   setActiveQuestion: Dispatch<SetStateAction<number>>;
   activeQuestion: number;
+  addNewQuestion: () => void;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -89,6 +91,7 @@ export default function QuestionForm({
   });
 
   useEffect(() => {
+    if (questions.length < 1) addNewQuestion();
     form.reset({
       id: questions[activeQuestion]?.id,
       hard: questions[activeQuestion]?.hard ?? false,
@@ -195,6 +198,10 @@ export default function QuestionForm({
                         ),
                       );
                       setActiveQuestion(0);
+                      toast({
+                        title: 'Question deleted successfully',
+                        variant: 'primary'
+                      });
                     }}
                   >
                     <Button

@@ -44,7 +44,7 @@ export function QuestionBuilder({
           activeQuestion={activeQuestion}
           setActiveQuestion={setActiveQuestion}
           addNewQuestion={addNewQuestion}
-        />
+          />
       </div>
       <div className="h-[calc(100vh-60px)] ">
         <ScrollArea className="h-full">
@@ -54,6 +54,7 @@ export function QuestionBuilder({
             setQuestions={setQuestionState}
             setActiveQuestion={setActiveQuestion}
             activeQuestion={activeQuestion}
+            addNewQuestion={addNewQuestion}
           />
         </ScrollArea>
       </div>
