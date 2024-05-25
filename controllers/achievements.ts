@@ -4,7 +4,27 @@ import { eq, min, notInArray, sql } from "drizzle-orm";
 import { getUser } from "@/lib/utils";
 import { getUserStats } from "./profiles";
 
-export const updateAchievementsState = async () => {
+export const getAchievements = async () => {
+    const user = await getUser();
+
+    if (!user){
+        console.log("Missing user")
+    }
+
+    const data = await db
+    .select({
+        type: achievements.type,
+        name : achievements.name,
+        description : achievements.description
+    })
+    .from(achievements)
+    .innerJoin(userAchievement, eq(achievements.id, userAchievement.achievementId))
+    .where(eq(userAchievement.userId, user!.id));
+
+    return data;
+}
+
+export const checkAndAssignAchievements = async () => {
 
     const user = await getUser();
 
@@ -49,7 +69,7 @@ export const updateAchievementsState = async () => {
 
 }
 
-export const getClosestAchievements = async () => {
+export const getAchievementsProgress = async () => {
     const user = await getUser();
 
     if (!user){

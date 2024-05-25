@@ -8,7 +8,7 @@ import { db } from "@/utils/drizzle/db";
 import { UUID } from "crypto";
 
 import { eq, and, count, gt, gte } from "drizzle-orm";
-import { updateAchievementsState } from "./achievements";
+import { checkAndAssignAchievements } from "./achievements";
 import { NextResponse } from "next/server";
 
 // export const addQuiz = async (quiz: InsertQuiz) => {
@@ -126,7 +126,7 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
           );
       }
 
-      NextResponse.json(await updateAchievementsState());
+      NextResponse.json(await checkAndAssignAchievements());
 
     } catch (error) {
       console.error("Error updating quiz details");
