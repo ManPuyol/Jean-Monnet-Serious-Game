@@ -23,6 +23,8 @@ export const achievements = pgTable("achievements", {
 	description: varchar("description", { length: 256 }),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+	threshold: smallint("threshold"),
+	type: smallint("type"),
 });
 
 export const languages = pgTable("languages", {

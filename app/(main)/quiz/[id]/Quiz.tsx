@@ -44,7 +44,7 @@ export function Quiz({ questions , user , previousScore, quizId}: { questions: a
       }
       return acc;
     }, 0);
-    return (correctAnswers * 100) / questions.length;
+    return Math.round((correctAnswers * 100) / questions.length);
   }
 
   return (
