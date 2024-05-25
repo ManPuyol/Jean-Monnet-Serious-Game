@@ -8,7 +8,11 @@ import { usePathname } from 'next/navigation';
 export default function StudyLink() {
   const path = usePathname();
 
-  if (path === '/study' || path.startsWith('/teach')) {
+  if (
+    path === '/study' ||
+    path.startsWith('/teach') ||
+    path.startsWith('/build')
+  ) {
     return null;
   }
 
