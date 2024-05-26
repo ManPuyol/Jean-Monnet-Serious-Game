@@ -93,14 +93,14 @@ export const getQuiz = async (quizId: number) => {
             columns: { question: true, hard: true },
             with: {
               answers: {
-                columns: { questionId: true, name: true, correct: true }
+                columns: { questionId: true, name: true, correct: true },
+                orderBy: (answers, { sql }) => [sql`RANDOM()`]
               }
             }
           }
         }
       },
     }
-
   })
 
   return data;
