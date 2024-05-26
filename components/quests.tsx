@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { getAchievementsProgress } from '@/controllers/achievements';
 import { getEmoji } from '@/lib/utils';
@@ -32,7 +27,7 @@ export const Quests = async () => {
       <CardContent>
         <ul className="w-full space-y-4">
           {userStats.map((quest, index) => (
-            <div className="flex items-center w-full pb-4 gap-x-3">
+            <div key={index} className="flex items-center w-full pb-4 gap-x-3">
               <p className="text-4xl">{getEmoji(quest.type || 0)}</p>
 
               <div className="flex flex-col gap-y-2 w-full">
@@ -59,27 +54,6 @@ export const Quests = async () => {
             </div>
           ))}
         </ul>
-        {/* <ul className="w-full space-y-4">
-        {quests.map((quest, index) => {
-          const progress = (points / quest.value) * 100;
-/
-          return (
-            <div
-              className="flex items-center w-full pb-4 gap-x-3"
-              key={quest.title + index}
-            >
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Trophy className=" h-[1.2rem] w-[1.2rem] rotate-0 scale-100" />
-              </Button>
-
-              <div className="flex flex-col gap-y-2 w-full">
-                <p className="text-neutral-700 text-sm font-bold">asdasd</p>
-                <Progress value={progress} className="h-2" />
-              </div>
-            </div>
-          );
-        })}
-      </ul> */}
       </CardContent>
     </Card>
   );
