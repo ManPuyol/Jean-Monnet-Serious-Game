@@ -15,6 +15,5 @@ export const LogOutLink = () => {
 export async function signOut() {
   const supabase = createClient();
   const { error } = await supabase.auth.signOut();
-  //console.log('signOut', error);
   return error;
 }

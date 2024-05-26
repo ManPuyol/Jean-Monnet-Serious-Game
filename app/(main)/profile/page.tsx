@@ -78,7 +78,7 @@ export default async function ProfilePage() {
           <CardHeader>
             <CardTitle>Change password</CardTitle>
             <CardDescription>
-              Change your password here. After saving, you'll be logged out.
+              Change your password here. Make sure to use a strong password.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 w-full">
