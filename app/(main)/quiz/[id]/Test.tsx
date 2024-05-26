@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Answers } from '@/schemas/answers';
-import { set } from 'zod';
+import { Answer } from '@/schemas/answers';
 
 interface QuizProps {
   question: string;
-  answers: Answers[];
+  answers: Answer[];
   progress: number;
   setCurrentQuestion: React.Dispatch<React.SetStateAction<number>>;
   setAnswers: React.Dispatch<React.SetStateAction<any[]>>;

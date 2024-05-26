@@ -8,7 +8,7 @@ export const units = pgTable("units", {
 	name: text("name").notNull(),
 	description: varchar("description", { length: 256 }).notNull(),
 	subjectId: integer("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade", onUpdate: "cascade" } ),
-	active: boolean("active").default(true),
+	active: boolean("active").default(false),
 	questionsPerQuiz: smallint("questions_per_quiz").default(10).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),

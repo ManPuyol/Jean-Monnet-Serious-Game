@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { LoaderCircle, EyeIcon, EyeOffIcon } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import {
   Card,

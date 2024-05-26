@@ -12,6 +12,7 @@ type Props = {
   lessons?: Quiz[];
   activeLesson: any;
   activeLessonPercentage: number;
+  numberOfQuizzes: number;
 };
 
 export const Unit = ({
@@ -22,6 +23,7 @@ export const Unit = ({
   lessons,
   activeLesson,
   activeLessonPercentage,
+  numberOfQuizzes,
 }: Props) => {
   return (
     <>
@@ -39,22 +41,22 @@ export const Unit = ({
                   key={lesson.id}
                   id={lesson.id}
                   index={index + 1}
-                  totalCount={8}
-                  current={lesson.score === null} //lesson.id === activeLesson.id}
+                  totalCount={numberOfQuizzes}
+                  current={lesson.score === null || lesson.score < 70} //lesson.id === activeLesson.id}
                   locked={false} //lesson.id !== activeLesson.id}
                   percentage={activeLessonPercentage}
                 />
               );
             })}
-            {lessons.length < 8 &&
-              Array(8 - lessons.length)
+            {lessons.length < numberOfQuizzes &&
+              Array(numberOfQuizzes - lessons.length)
                 .fill(0)
                 .map((_, index) => (
                   <LessonButton
                     key={index}
                     id={2222}
                     index={lessons.length + index + 1}
-                    totalCount={8}
+                    totalCount={numberOfQuizzes}
                     current={false}
                     locked={true}
                     percentage={activeLessonPercentage}
@@ -63,70 +65,19 @@ export const Unit = ({
           </>
         ) : (
           <div className="opacity-50">
-            <LessonButton
-              id={2222}
-              index={1}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2223}
-              index={2}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2224}
-              index={3}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2223}
-              index={4}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2224}
-              index={5}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2224}
-              index={6}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2224}
-              index={7}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
-            <LessonButton
-              id={2224}
-              index={8}
-              totalCount={8}
-              current={false} //lesson.id === activeLesson.id}
-              locked={true} //lesson.id !== activeLesson.id}
-              percentage={activeLessonPercentage}
-            />
+            {Array(numberOfQuizzes)
+                .fill(0)
+                .map((_, index) => (
+                  <LessonButton
+                    key={index}
+                    id={2222}
+                    index={index + 1}
+                    totalCount={numberOfQuizzes}
+                    current={false}
+                    locked={true}
+                    percentage={activeLessonPercentage}
+                  />
+              ))}
           </div>
         )}
       </div>

@@ -40,7 +40,7 @@ export const deleteSubject = async (id: number) => {
 };
 
 export const updateSubject = async (id: number, subject: InsertSubject) => {
-  await db
+  return await db
     .update(subjects)
     .set({
       ...subject,
@@ -48,7 +48,7 @@ export const updateSubject = async (id: number, subject: InsertSubject) => {
     })
     .where(
       eq(subjects.id, id)
-    );
+    ).returning({ id: subjects.id });
 };
 
 export const getSubjects = async (userId: UUID): Promise<Subject[]> => {
@@ -64,14 +64,6 @@ export const getSubjects = async (userId: UUID): Promise<Subject[]> => {
   return subjectList;
 }
 export const getSubject = async (subjectId: number) => {
-  // const nnnn = await db.query.subjects.findFirst({
-  //   where: {
-  //     id: subjectId
-  //   }, 
-  //   with: {
-  //     units: true
-  //   }
-  // });
   try {
 
     const data = await db
@@ -160,4 +152,11 @@ export const enrollSubjects = async (userId: UUID, subjectIds: number[]) => {
         subjectId
       })
   ));
+}
+
+export const activateSubject = async (subjectId : number) => {
+  await db
+  .update(subjects)
+  .set({active : true})
+  .where(eq(subjects.id, subjectId));
 }
