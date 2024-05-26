@@ -19,13 +19,14 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getAchievements } from '@/controllers/achievements';
 import { getEmoji } from '@/lib/utils';
+import ChangePasswordForm from './ChangePasswordForm';
+
 
 export default async function ProfilePage() {
   // Fetch user's achievements and streak here
   // For example: const achievements = userAchievement.fetch();
   const { nameInitials } = await getUserNameInitials();
   const achievements = await getAchievements();
-  console.log(achievements);
 
   return (
     <ScrollArea className="h-[calc(100vh-60px)]">
@@ -81,19 +82,9 @@ export default async function ProfilePage() {
               Change your password here. After saving, you'll be logged out.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
+          <CardContent className="space-y-2 w-full">
+            <ChangePasswordForm />
           </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
         </Card>
       </div>
     </ScrollArea>

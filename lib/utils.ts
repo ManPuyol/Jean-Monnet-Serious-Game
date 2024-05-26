@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { createClient } from '@/utils/supabase/server';
+import { createClient as createClientServer } from '@/utils/supabase/server';
+import { createClient as createClientClient } from '@/utils/supabase/client';
 import { NextResponse } from "next/server";
 
 
@@ -9,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function getUser() {
-  const supabase = createClient();
+  const supabase = createClientServer();
 
   const {
     data: { user },
@@ -20,14 +21,15 @@ export async function getUser() {
 }
 
 export async function updatePassword(newPassword : string){
-  const supabase = createClient();
+
+  const supabase = await createClientClient();
 
   const { data, error } = await supabase.auth.updateUser({
     password: newPassword
   })
 
   if(error){
-    NextResponse.json(error);
+    return NextResponse.json(error);
   }
 
   return data;
