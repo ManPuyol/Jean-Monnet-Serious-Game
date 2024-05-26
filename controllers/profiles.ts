@@ -1,12 +1,10 @@
-"use server"
-
 import { viewCounterAchievements } from "@/interfaces/viewCounterAchievements";
 import { getUser } from "@/lib/utils";
 import { db } from "@/utils/drizzle/db";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export const getUserNameInitials = async () => {
+export const getProfileInfo = async () => {
     const user = await getUser();
 
     if (!user){
@@ -21,6 +19,8 @@ export const getUserNameInitials = async () => {
 
     return {
         nameInitials: fullNameInitials,
+        userName: user?.user_metadata.full_name,
+        joinedAt: user?.created_at
     }
 }
 

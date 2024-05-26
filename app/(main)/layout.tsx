@@ -14,14 +14,14 @@ import { LogOutLink } from '@/components/LogOutLink';
 import { getUser } from '@/lib/utils';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getUserNameInitials } from '@/controllers/profiles';
+import { getProfileInfo } from '@/controllers/profiles';
 
 export default async function Dashboard({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { nameInitials } = await getUserNameInitials();
+  const { nameInitials } = await getProfileInfo();
 
 
   const user = await getUser();
