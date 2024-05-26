@@ -2,21 +2,31 @@
 import QuestionForm from './questionForm';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarQuestions } from './SidebarQuestions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 
-export function QuestionBuilder({ questions }: { questions: any[] }) {
+export function QuestionBuilder({
+  questions,
+  unitId,
+}: {
+  questions: any[];
+  unitId: number;
+}) {
   const [questionState, setQuestionState] = useState(questions);
   const [activeQuestion, setActiveQuestion] = useState(0);
+
+  useEffect(() => {
+    if (questions.length < 1) addNewQuestion();
+  }, []);
 
   const addNewQuestion = () => {
     // Ensure all questions have ids
     if (!questionState.every(question => question.id !== undefined)) {
-      setActiveQuestion(questionState.length -1); // Set active question to the last one
+      setActiveQuestion(questionState.length - 1); // Set active question to the last one
       toast({
         title: 'Hey!',
         variant: 'destructive',
-        description: 'Submit the new question before adding a new one.',
+        description: 'Submit this question before adding a new one.',
       });
       return;
     }
@@ -34,14 +44,17 @@ export function QuestionBuilder({ questions }: { questions: any[] }) {
           activeQuestion={activeQuestion}
           setActiveQuestion={setActiveQuestion}
           addNewQuestion={addNewQuestion}
-        />
+          />
       </div>
       <div className="h-[calc(100vh-60px)] ">
         <ScrollArea className="h-full">
           <QuestionForm
+            unitId={unitId}
             questions={questionState}
             setQuestions={setQuestionState}
+            setActiveQuestion={setActiveQuestion}
             activeQuestion={activeQuestion}
+            addNewQuestion={addNewQuestion}
           />
         </ScrollArea>
       </div>

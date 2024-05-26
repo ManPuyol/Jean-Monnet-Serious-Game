@@ -14,8 +14,8 @@ export default function ProfilePage() {
       <Card>
         <CardHeader>
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src="" />
+            <AvatarFallback>DF</AvatarFallback>
           </Avatar>
           <Flame />
         </CardHeader>

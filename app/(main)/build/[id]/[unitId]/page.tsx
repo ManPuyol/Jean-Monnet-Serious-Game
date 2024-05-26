@@ -10,7 +10,7 @@ export default async function page({
   const questions = await getQuestionsFromUnit(params.unitId);
 
   return (
-    <QuestionBuilder questions={questions}/>
+    <QuestionBuilder questions={questions} unitId={params.unitId} />
   );
 }
 

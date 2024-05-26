@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -13,15 +12,27 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check, Trash2 } from 'lucide-react';
-import { addQuestionWithAnswers, updateQuestionWithAnswers } from '@/controllers/questions';
+import {
+  addQuestionWithAnswers,
+  deleteQuestion,
+  updateQuestionWithAnswers,
+} from '@/controllers/questions';
+import { ConfirmDialog } from '@/components/ConfirmDialog';
 
 const FormSchema = z.object({
   id: z.number().optional(),
+  hard: z.boolean().default(false),
   question: z
     .string()
     .min(1, {
@@ -43,18 +54,25 @@ const FormSchema = z.object({
 });
 
 export default function QuestionForm({
+  unitId,
   questions,
   setQuestions,
+  setActiveQuestion,
   activeQuestion,
+  addNewQuestion
 }: {
+  unitId: number;
   questions: any[];
   setQuestions: Dispatch<SetStateAction<any[]>>;
+  setActiveQuestion: Dispatch<SetStateAction<number>>;
   activeQuestion: number;
+  addNewQuestion: () => void;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: questions[activeQuestion]?.id,
+      hard: questions[activeQuestion]?.hard ?? false,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -65,14 +83,18 @@ export default function QuestionForm({
           ],
     },
   });
+
+  const [hard, setHard] = useState(questions[activeQuestion]?.hard ?? false);
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'answers',
   });
 
   useEffect(() => {
+    if (questions.length < 1) addNewQuestion();
     form.reset({
       id: questions[activeQuestion]?.id,
+      hard: questions[activeQuestion]?.hard ?? false,
       question: questions[activeQuestion]?.question ?? '',
       answers: questions[activeQuestion]?.answers.length
         ? questions[activeQuestion]?.answers
@@ -82,7 +104,8 @@ export default function QuestionForm({
             { name: '', correct: false },
           ],
     });
-  }, [activeQuestion]);
+    setHard(questions[activeQuestion]?.hard ?? false);
+  }, [activeQuestion, questions]);
 
   const addAnswer = () => {
     append({ name: '', correct: false });
@@ -90,26 +113,27 @@ export default function QuestionForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.id) {
-      const id = await addQuestionWithAnswers(data)
+      //@ts-ignore
+      data.unitId = unitId;
+      //@ts-ignore
+      const id = await addQuestionWithAnswers(data);
       toast({
         title: 'Question created successfully',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{JSON.stringify(id, null, 2)}</code>
-            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
           </pre>
         ),
       });
-      data.id = id
+      data.id = id;
     } else {
       //@ts-ignore
-      await updateQuestionWithAnswers(data)
+      await updateQuestionWithAnswers(data);
       toast({
         title: 'Question updated successfully',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-            {/* <code className="text-white">{JSON.stringify(questions[activeQuestion], null, 2)}</code> */}
           </pre>
         ),
       });
@@ -123,24 +147,75 @@ export default function QuestionForm({
     <Form {...form}>
       <div className="flex justify-around">
         <form
-          onSubmit={form.handleSubmit((formData) => onSubmit(formData))}
+          onSubmit={form.handleSubmit(formData => onSubmit(formData))}
           className="flex flex-col max-w-3xl w-full p-6 space-y-4"
         >
           <FormField
             control={form.control}
             name="question"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Question</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Enter question"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <div className="flex flex-row items-start gap-4">
+                <FormItem className="flex-1">
+                  <FormLabel>Question</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      placeholder="Enter question"
+                      className="h-24 resize-none"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                <div className="flex flex-col items-start gap-4">
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="relative top-[2rem] text-xl"
+                          type="button"
+                          variant="outline"
+                          size={'icon'}
+                          onClick={() => {
+                            const newDifficulty = !form.getValues().hard;
+                            form.setValue('hard', newDifficulty);
+                            setHard(newDifficulty);
+                          }}
+                        >
+                          {hard ? '🧠' : '🙂'}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent sideOffset={10} side="top">
+                        {hard ? 'Hard' : 'Normal'}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <ConfirmDialog
+                    onConfirm={() => {
+                      deleteQuestion(questions[activeQuestion].id);
+                      setQuestions(
+                        questions.filter(
+                          q => q.id !== questions[activeQuestion].id,
+                        ),
+                      );
+                      setActiveQuestion(0);
+                      toast({
+                        title: 'Question deleted successfully',
+                        variant: 'primary'
+                      });
+                    }}
+                  >
+                    <Button
+                      className="relative top-[2rem]"
+                      type="button"
+                      variant="destructive"
+                      size={'icon'}
+                      disabled={!questions[activeQuestion]?.id}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </ConfirmDialog>
+                </div>
+              </div>
             )}
           />
           {fields.map((f, index) => (
