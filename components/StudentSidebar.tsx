@@ -17,8 +17,8 @@ export default async function StudentSidebar() {
   const subjects: Subject[] = await getSubjects(user.id as UUID); // Specify the type of the subjects variable
   return (
     <div className="flex-1 md:border-r pt-2">
-      <div className="px-3 py-2">
-        <div className="flex items-center pl-4 justify-between mb-2">
+      <div className="py-2">
+        <div className="flex items-center pl-7 pr-3 justify-between mb-2">
           <h3 className="font-semibold text-lg tracking-tight">Subjects</h3>
           <Enroll user={user}/>
         </div>

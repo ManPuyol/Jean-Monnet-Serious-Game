@@ -16,19 +16,13 @@ import {
   enrollSubjects,
   getEnrolledSubjects,
 } from '@/controllers/subjects';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
 import { User } from '@supabase/supabase-js';
 
-
-export default function SubjectSelectionCard({user}: {user: User}) {
+export default function SubjectSelectionCard({ user }: { user: User }) {
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -36,28 +30,28 @@ export default function SubjectSelectionCard({user}: {user: User}) {
 
   useEffect(() => {
     startTransition(() => {
-        getEnrolledSubjects(user.id as UUID).then(enrolledSubjects => {
-          allSubjects().then(allSubjects => {
-            const selectedSubjects = allSubjects.filter(subject =>
-              enrolledSubjects.some(
-                enrolledSubject => enrolledSubject.id === subject.id,
-              ),
-            );
-            setSubjects(allSubjects);
-            setSelectedSubjects(selectedSubjects);
-          });
+      getEnrolledSubjects(user.id as UUID).then(enrolledSubjects => {
+        allSubjects().then(allSubjects => {
+          const selectedSubjects = allSubjects.filter(subject =>
+            enrolledSubjects.some(
+              enrolledSubject => enrolledSubject.id === subject.id,
+            ),
+          );
+          setSubjects(allSubjects);
+          setSelectedSubjects(selectedSubjects);
         });
+      });
     });
   }, []);
 
   return (
     <div className="h-[calc(100vh-60px)] p-6">
-      <Card className='h-full'>
+      <Card className="h-full">
         <CardHeader>
           <CardTitle>Select subject</CardTitle>
         </CardHeader>
-        <CardContent className='h-full'>
-          <Command className="overflow-hidden">
+        <CardContent className="h-5/6 pb-0">
+          <Command>
             <CommandInput placeholder="Search subject..." />
             <CommandList className="max-h-full">
               <CommandEmpty>
