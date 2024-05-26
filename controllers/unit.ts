@@ -80,3 +80,10 @@ export const getQuestionsAndAnswers = async (unitId : number) => {
 
   return data;
 }
+
+export const activateUnit = async (unitId : number) => {
+  await db
+  .update(units)
+  .set({active : true})
+  .where(eq(units.id, unitId));
+}

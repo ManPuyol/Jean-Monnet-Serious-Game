@@ -5,7 +5,7 @@ export const subjects = pgTable("subjects", {
 	id: serial("id").primaryKey().notNull(),
 	name: varchar("name", { length: 256 }).notNull(),
 	description: varchar("description", { length: 256 }).notNull(),
-	active: boolean("active").default(true).notNull(),
+	active: boolean("active").default(false).notNull(),
 	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
 });
