@@ -84,7 +84,7 @@ export const getQuiz = async (quizId: number) => {
     where: (quizzes, { eq }) => (and(
       eq(quizzes.id, quizId),
     )),
-    columns: {score: true},
+    columns: { score: true },
     with: {
       quizDetails: {
         columns: {},
@@ -107,9 +107,9 @@ export const getQuiz = async (quizId: number) => {
 
 }
 
-export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number, previousScore : number, quizId : number) => {
+export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score: number, previousScore: number, quizId: number) => {
 
-  if (score > previousScore || previousScore == null){
+  if (score > previousScore || previousScore == null) {
 
     try {
       await updateScore(score, quizId);
@@ -130,19 +130,19 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
             )
           );
       }
-    } catch (error){
+    } catch (error) {
       console.log("Error updating quiz details")
     }
 
     try {
 
-      NextResponse.json(await checkAndAssignAchievements());
+      return await checkAndAssignAchievements()
 
-    } catch (error){
+    } catch (error) {
       console.log("Error updating achievements")
     }
   }
- 
+
 }
 
 export const updateScore = async (newScore: number, quizId: number) => {
@@ -150,7 +150,7 @@ export const updateScore = async (newScore: number, quizId: number) => {
     .update(quizzes)
     .set({ score: newScore })
     .where(
-        eq(quizzes.id, quizId)
+      eq(quizzes.id, quizId)
     );
 
 

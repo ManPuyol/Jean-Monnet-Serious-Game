@@ -6,7 +6,11 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import JSConfetti from 'js-confetti';
 
-export function QuizResults({ getScore }: { getScore: Function; }) {
+export function QuizResults({
+  getScore,
+}: {
+  getScore: Function;
+}) {
   const router = useRouter();
   const score = getScore();
 
@@ -50,13 +54,15 @@ export function QuizResults({ getScore }: { getScore: Function; }) {
           variant="secondary"
           className={cn(
             'py-2 px-4',
-            Number(score.toFixed(0)) >= 70 ? 'hidden' : 'animate-wiggle'
+            Number(score.toFixed(0)) >= 70 ? 'hidden' : 'animate-wiggle',
           )}
         >
           Try again
         </Button>
         <Button
-          onClick={() => { router.back(); router.refresh() }}
+          onClick={() => {
+            history.back();
+          }}
           variant="secondary"
           className="py-2 px-4"
         >

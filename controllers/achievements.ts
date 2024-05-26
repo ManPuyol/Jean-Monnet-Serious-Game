@@ -95,25 +95,7 @@ export const getAchievementsProgress = async () => {
     const stats = await getUserStats();
 
     //@ts-ignore
-    const { quizzesDone, quizzesPassed, quizzesPerfect } = stats[0];
-
-    // const resultArray = remainingAchievements.map(item => {
-    //   let current;
-    //   switch (item.type) {
-    //     case 1:
-    //       current = quizzesDone;
-    //       break;
-    //     case 2:
-    //       current = quizzesPassed;
-    //       break;
-    //     case 3:
-    //       current = quizzesPerfect;
-    //       break;
-    //     default:
-    //       current = 0;
-    //   }
-    //   return { type: item.type, threshold: item.threshold, current: current };
-    // });
+    const { quizzesDone, quizzesPassed, quizzesPerfect } = stats;
 
     const typeToValueMap = {
         1: quizzesDone,
