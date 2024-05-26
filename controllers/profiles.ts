@@ -6,7 +6,7 @@ import { db } from "@/utils/drizzle/db";
 import { eq, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export const getDataForProfile = async () => {
+export const getUserNameInitials = async () => {
     const user = await getUser();
 
     if (!user){
@@ -42,5 +42,5 @@ export const getUserStats = async () => {
         eq(viewCounterAchievements.userId, user!.id)
     )
 
-    return data;
+    return data[0];
 }
