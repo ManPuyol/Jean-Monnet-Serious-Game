@@ -114,6 +114,11 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
     try {
       await updateScore(score, quizId);
 
+    } catch (error) {
+      console.error("Error updating score");
+    }
+
+    try {
       for (const singularQuiz of allQuizzesAnswers.results) {
         await db
           .update(quizDetails)
@@ -125,11 +130,16 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
             )
           );
       }
+    } catch (error){
+      console.log("Error updating quiz details")
+    }
 
-      NextResponse.json(await checkAndAssignAchievements());
+    try {
+      
+      await checkAndAssignAchievements();
 
-    } catch (error) {
-      console.error("Error updating quiz details");
+    } catch (error){
+      console.log("Error updating achievements")
     }
   }
  

@@ -32,6 +32,8 @@ export const checkAndAssignAchievements = async () => {
         console.log("Missing user")
     }
 
+    const user__id = user?.id;
+
     const query = sql`
     SELECT achievements.id, achievements.name, achievements.description, achievements.type
     FROM ((
@@ -43,7 +45,7 @@ export const checkAndAssignAchievements = async () => {
         AND view_counter_achievements.user_id = user_achievement."user_Id"
     )
     )
-    WHERE view_counter_achievements.user_id = '2b9c3b78-c680-4667-a67f-73fee79e84a6'
+    WHERE view_counter_achievements.user_id = ${user__id}
     AND (user_achievement.achievement_id IS NULL)
     AND ((
         quizzes_done >= threshold)
@@ -54,15 +56,17 @@ export const checkAndAssignAchievements = async () => {
         OR ((quizzes_perfect >= threshold)
         AND (type = 3)
         )
-    )`;
+    );`;
 
     const result = await db.execute(query);
+
+    console.log(result)
 
     for (const each of result){
         await db
         .insert(userAchievement)
         //@ts-ignore
-        .currents({userId: user!.id, achievementId: each.id});
+        .values({userId: user__id, achievementId: each.id});
     }
 
     return result;
@@ -92,6 +96,7 @@ export const getAchievementsProgress = async () => {
 
     const stats = await getUserStats();
 
+    //@ts-ignore
     const { quizzesDone, quizzesPassed, quizzesPerfect } = stats[0];
 
     // const resultArray = remainingAchievements.map(item => {
