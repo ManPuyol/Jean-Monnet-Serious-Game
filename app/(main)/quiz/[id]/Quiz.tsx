@@ -1,39 +1,71 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Question } from '@/schemas/questions';
 import Test from './Test';
 import { QuizResults } from './QuizResults';
-import { UUID } from 'crypto';
 import { submitQuiz } from '@/controllers/quizzes';
-import { getUser } from '@/lib/utils';
+import { toast as sonnerToast } from 'sonner';
 
 export type quizAnswers = {
-  userId: string,
+  userId: string;
   results: {
-    questionId: number,
-    correct: boolean,
-  }[]
-}
+    questionId: number;
+    correct: boolean;
+  }[];
+};
 
-const submitResults = async (answers: any, user: any, score : number, previousScore : number, quizId : number) => {
-
-  const query : quizAnswers = {
-    userId : user!.id,
-    results : answers,
+const getEmoji = (type: number) => {
+  switch (type) {
+    case 1:
+      return '✍️';
+    case 2:
+      return '🏅';
+    case 3:
+      return '💯';
+    default:
+      return '🏆';
   }
+};
 
-  submitQuiz(query, score, previousScore, quizId);
+const submitResults = async (
+  answers: any,
+  user: any,
+  score: number,
+  previousScore: number,
+  quizId: number,
+) => {
+  const query: quizAnswers = {
+    userId: user!.id,
+    results: answers,
+  };
 
-}
+  const achievements = await submitQuiz(query, score, previousScore, quizId);
+  achievements?.forEach(achievement => {
+    sonnerToast(
+      `${getEmoji(achievement.type as number)} ${achievement.name as string}`,
+      {
+        description: achievement.description as string,
+      },
+    );
+  });
+};
 
-export function Quiz({ questions , user , previousScore, quizId}: { questions: any[] , user: any , previousScore : any, quizId : number}) {
-
+export function Quiz({
+  questions,
+  user,
+  previousScore,
+  quizId,
+}: {
+  questions: any[];
+  user: any;
+  previousScore: any;
+  quizId: number;
+}) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<any>([]);
 
   useEffect(() => {
     if (currentQuestion >= questions.length) {
-      void submitResults(answers, user, getScore() , previousScore, quizId);
+      void submitResults(answers, user, getScore(), previousScore, quizId);
     }
   }, [answers]);
 
@@ -55,7 +87,8 @@ export function Quiz({ questions , user , previousScore, quizId}: { questions: a
           setCurrentQuestion={setCurrentQuestion}
           setAnswers={setAnswers}
           progress={(currentQuestion * 100) / questions.length}
-          answers={questions[currentQuestion].question.answers} />
+          answers={questions[currentQuestion].question.answers}
+        />
       ) : (
         <QuizResults getScore={getScore} />
       )}

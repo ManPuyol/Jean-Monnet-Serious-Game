@@ -3,28 +3,14 @@ import {
   CardHeader,
   CardContent,
   CardTitle,
-  CardDescription,
-  CardFooter,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { getAchievementsProgress } from '@/controllers/achievements';
+import { getEmoji } from '@/lib/utils';
 
 export const Quests = async () => {
   const userStats = await getAchievementsProgress();
   console.log('userStats', userStats);
-
-  const getEmoji = (type: number) => {
-    switch (type) {
-      case 1:
-        return '✍️';
-      case 2:
-        return '🏅';
-      case 3:
-        return '💯';
-      default:
-        return '🏆';
-    }
-  };
 
   const getQuestType = (type: number) => {
     switch (type) {
@@ -56,14 +42,16 @@ export const Quests = async () => {
                     {getQuestType(quest.type || 0)}
                   </p>
                   <p className="text-muted-foreground text-sm font-bold ">
-                    {quest.current > quest.threshold
+                    {quest.current > (quest.threshold || 0)
                       ? quest.current
                       : `${quest.current || 0} / ${quest.threshold || 5}`}
                   </p>
                 </div>
                 <Progress
                   value={Math.min(
-                    Math.floor(quest.current / (quest.threshold || 100)) * 100,
+                    Math.floor(
+                      (quest.current * 100) / (quest.threshold || 100),
+                    ),
                     100,
                   )}
                   className="h-2"

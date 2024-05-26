@@ -18,12 +18,14 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getAchievements } from '@/controllers/achievements';
+import { getEmoji } from '@/lib/utils';
 
 export default async function ProfilePage() {
   // Fetch user's achievements and streak here
   // For example: const achievements = userAchievement.fetch();
   const { nameInitials } = await getUserNameInitials();
-  const achievements = await getAchievements()
+  const achievements = await getAchievements();
+  console.log(achievements);
 
   return (
     <ScrollArea className="h-[calc(100vh-60px)]">
@@ -57,14 +59,16 @@ export default async function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              <div className="flex flex-col items-center gap-2 p-3 rounded-lg shadow-lg bg-white dark:bg-gray-950 transition-all hover:scale-105 hover:shadow-xl">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full  text-white">
-                  <p className="text-4xl">✍️</p>
+              {achievements.map(achievement => (
+                <div className="flex flex-col items-center gap-2 p-3 rounded-lg shadow-lg bg-white dark:bg-gray-950 transition-all hover:scale-105 hover:shadow-xl">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full  text-white">
+                    <p className="text-4xl">{getEmoji(achievement.type)}</p>
+                  </div>
+                  <p className="text-sm font-semibold text-center">
+                    {achievement.name}
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-center">
-                  Lightning Fast
-                </p>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>

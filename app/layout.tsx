@@ -1,5 +1,6 @@
 import { GeistSans } from "geist/font/sans";
 import { Toaster } from "@/components/ui/toaster"
+import { Toaster as Sonner } from "@/components/ui/sonner"
 import "./globals.css";
 import React from 'react';
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -31,6 +32,7 @@ export default function RootLayout({
           {children}
         </main>
         <Toaster />
+        <Sonner expand={true} visibleToasts={9}/>
       </ThemeProvider>
       </body>
     </html>
