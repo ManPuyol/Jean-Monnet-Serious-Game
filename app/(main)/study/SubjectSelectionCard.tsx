@@ -51,12 +51,12 @@ export default function SubjectSelectionCard({user}: {user: User}) {
   }, []);
 
   return (
-    <div className="h-full p-6">
-      <Card>
+    <div className="h-[calc(100vh-60px)] p-6">
+      <Card className='h-full'>
         <CardHeader>
           <CardTitle>Select subject</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className='h-full'>
           <Command className="overflow-hidden">
             <CommandInput placeholder="Search subject..." />
             <CommandList className="max-h-full">
