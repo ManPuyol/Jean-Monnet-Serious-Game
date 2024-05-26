@@ -60,8 +60,6 @@ export const checkAndAssignAchievements = async () => {
 
     const result = await db.execute(query);
 
-    console.log(result)
-
     for (const each of result){
         await db
         .insert(userAchievement)

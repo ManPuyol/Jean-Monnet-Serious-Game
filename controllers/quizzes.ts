@@ -135,8 +135,8 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
     }
 
     try {
-      
-      await checkAndAssignAchievements();
+
+      NextResponse.json(await checkAndAssignAchievements());
 
     } catch (error){
       console.log("Error updating achievements")
