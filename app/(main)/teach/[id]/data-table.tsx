@@ -1,9 +1,10 @@
-'use client'
+'use client';
 import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  FilterFn,
   flexRender,
   getPaginationRowModel,
   getCoreRowModel,
@@ -11,6 +12,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+// A TanStack fork of Kent C. Dodds' match-sorter library that provides ranking information
+import {
+  RankingInfo,
+  rankItem,
+  compareItems,
+} from '@tanstack/match-sorter-utils';
 
 import {
   Table,
@@ -29,20 +36,49 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
+declare module '@tanstack/react-table' {
+  //add fuzzy filter to the filterFns
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>;
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo;
+  }
+}
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  // Define a custom fuzzy filter function that will apply ranking info to rows (using match-sorter utils)
+  const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+    // Rank the item
+    const itemRank = rankItem(row.getValue(columnId), value);
+
+    // Store the itemRank info
+    addMeta({
+      itemRank,
+    });
+
+    // Return if the item should be filtered in/out
+    return itemRank.passed;
+  };
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
+  const [globalFilter, setGlobalFilter] = React.useState('');
   const table = useReactTable({
     data,
     columns,
+    filterFns: {
+      fuzzy: fuzzyFilter, //define as a filter function that can be used in column definitions
+    },
     onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
+    globalFilterFn: 'fuzzy',
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -50,23 +86,12 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
   });
 
   return (
     <div className="space-y-4 max-h-full">
-      {/* <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter names..."
-          value={(table.getColumn('description')?.getFilterValue() as string) ?? ''}
-          onChange={event =>
-            {
-                table.getColumn('description')?.setFilterValue(event.target.value)
-            }
-          }
-          className="max-w-sm"
-        />
-      </div> */}
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

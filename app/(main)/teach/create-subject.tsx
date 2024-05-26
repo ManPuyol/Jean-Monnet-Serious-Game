@@ -63,19 +63,22 @@ export default function AddSubject() {
     setOpen(false);
 
     try {
-      const result: { id: number; error?: Error }[] = await addSubject({ name, description });
+      const result: { id: number; error?: Error }[] = await addSubject({
+        name,
+        description,
+      });
       if (result[0]?.error) {
         toast({
           variant: 'destructive',
           title: 'Failed to add subject',
           description: result[0]?.error.message,
         });
-      } else {
+      } else {  
         toast({
           title: 'Subject added successfully',
           variant: 'primary',
         });
-        router.push(`/teach/${result[0].id}`)
+        router.push(`/teach/${result[0].id}`);
       }
     } catch (error) {
       const errorMessage = (error as Error).message;
