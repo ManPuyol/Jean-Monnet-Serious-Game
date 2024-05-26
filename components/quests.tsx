@@ -11,7 +11,6 @@ import { getUserStats } from '@/controllers/profiles';
 
 export const Quests = async () => {
   const userstats = await getUserStats();
-  console.log(userstats);
   return (
     <Card className="space-y-2 w-full max-w-3xl">
       <CardHeader>
