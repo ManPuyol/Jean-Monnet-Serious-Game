@@ -93,14 +93,14 @@ export const getQuiz = async (quizId: number) => {
             columns: { question: true, hard: true },
             with: {
               answers: {
-                columns: { questionId: true, name: true, correct: true }
+                columns: { questionId: true, name: true, correct: true },
+                orderBy: (answers, { sql }) => [sql`RANDOM()`]
               }
             }
           }
         }
       },
     }
-
   })
 
   return data;
@@ -135,8 +135,8 @@ export const submitQuiz = async (allQuizzesAnswers: quizAnswers, score : number,
     }
 
     try {
-      
-      await checkAndAssignAchievements();
+
+      NextResponse.json(await checkAndAssignAchievements());
 
     } catch (error){
       console.log("Error updating achievements")

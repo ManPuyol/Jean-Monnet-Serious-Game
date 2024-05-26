@@ -60,8 +60,6 @@ export const checkAndAssignAchievements = async () => {
 
     const result = await db.execute(query);
 
-    console.log("Achivements to be assigned",result)
-
     for (const each of result){
         await db
         .insert(userAchievement)
@@ -98,24 +96,6 @@ export const getAchievementsProgress = async () => {
 
     //@ts-ignore
     const { quizzesDone, quizzesPassed, quizzesPerfect } = stats;
-
-    // const resultArray = remainingAchievements.map(item => {
-    //   let current;
-    //   switch (item.type) {
-    //     case 1:
-    //       current = quizzesDone;
-    //       break;
-    //     case 2:
-    //       current = quizzesPassed;
-    //       break;
-    //     case 3:
-    //       current = quizzesPerfect;
-    //       break;
-    //     default:
-    //       current = 0;
-    //   }
-    //   return { type: item.type, threshold: item.threshold, current: current };
-    // });
 
     const typeToValueMap = {
         1: quizzesDone,
