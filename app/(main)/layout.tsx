@@ -9,7 +9,7 @@ import {
 import { ModeToggle } from '@/components/ModeToggle';
 import StudyLink from '@/components/StudyLink';
 import { LogOutLink } from '@/components/LogOutLink';
-import { getUser } from '@/lib/utils';
+import { getUser } from "@/lib/getUser";
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getProfileInfo } from '@/controllers/profiles';

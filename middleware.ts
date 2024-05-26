@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
-import { getUser } from "./lib/utils";
+import { getUser } from "./lib/getUser";
 
 export async function middleware(request: NextRequest) {
   const user = await getUser();

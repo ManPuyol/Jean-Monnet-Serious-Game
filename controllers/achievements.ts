@@ -1,7 +1,7 @@
 import { db } from "@/utils/drizzle/db";
 import { achievements, userAchievement, users } from "@/drizzle/schema";
 import { eq, min, notInArray, sql } from "drizzle-orm";
-import { getUser } from "@/lib/utils";
+import { getUser } from "@/lib/getUser";
 import { getUserStats } from "./profiles";
 
 export const getAchievements = async () => {

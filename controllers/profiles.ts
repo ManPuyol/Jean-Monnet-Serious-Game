@@ -1,5 +1,5 @@
 import { viewCounterAchievements } from "@/interfaces/viewCounterAchievements";
-import { getUser } from "@/lib/utils";
+import { getUser } from "@/lib/getUser";
 import { db } from "@/utils/drizzle/db";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";

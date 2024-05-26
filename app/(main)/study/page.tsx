@@ -1,4 +1,4 @@
-import { getUser } from '@/lib/utils';
+import { getUser } from "@/lib/getUser";
 import SubjectSelectionCard from './SubjectSelectionCard';
 
 export default async function Study() {

@@ -1,15 +1,13 @@
-import { redirect, useParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import { Quests } from '@/components/quests';
 import { FeedWrapper } from '@/components/feed-wrapper';
 import { StickyWrapper } from '@/components/sticky-wrapper';
 
 import { Unit } from './unit';
-import { Header } from './header';
 import { getActiveUnits } from '@/controllers/unit';
 
-import { getUser } from '@/lib/utils';
-import { LoaderCircle } from 'lucide-react';
+import { getUser } from "@/lib/getUser";
 import { UUID } from 'crypto';
 
 const LearnPage = async ({ params }: { params: { id: string } }) => {
@@ -29,7 +27,7 @@ const LearnPage = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="flex flex-row-reverse gap-[24px] p-6 ">
       <StickyWrapper>
-        <Quests points={userProgress.points} />
+        <Quests/>
       </StickyWrapper>
       <FeedWrapper>
         {units.map(unit => (
