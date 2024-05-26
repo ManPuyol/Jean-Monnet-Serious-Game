@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import Image from 'next/image';
-
 import {
   Card,
   CardHeader,
@@ -9,17 +6,14 @@ import {
   CardDescription,
   CardFooter,
 } from '@/components/ui/card';
-import { quests } from '@/constants';
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { getUserStats } from '@/controllers/profiles';
-import { Award, BookOpenCheck, CircleUser, Flame, Trophy } from 'lucide-react';
 
 export const Quests = async () => {
   const userstats = await getUserStats();
   console.log(userstats);
   return (
-    <Card className="space-y-2 w-full max-w-[400px]">
+    <Card className="space-y-2 w-full max-w-3xl">
       <CardHeader>
         <CardTitle>Quests</CardTitle>
       </CardHeader>
