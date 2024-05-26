@@ -17,11 +17,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getAchievements } from '@/controllers/achievements';
 
 export default async function ProfilePage() {
   // Fetch user's achievements and streak here
   // For example: const achievements = userAchievement.fetch();
   const { nameInitials } = await getUserNameInitials();
+  const achievements = await getAchievements()
 
   return (
     <ScrollArea className="h-[calc(100vh-60px)]">
@@ -52,9 +54,6 @@ export default async function ProfilePage() {
         <Card className="w-full max-w-3xl">
           <CardHeader>
             <CardTitle>Achievements</CardTitle>
-            <CardDescription>
-              Make changes to your account here. Click save when you're done.
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

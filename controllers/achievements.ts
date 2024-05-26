@@ -60,7 +60,7 @@ export const checkAndAssignAchievements = async () => {
 
     const result = await db.execute(query);
 
-    console.log(result)
+    console.log("Achivements to be assigned",result)
 
     for (const each of result){
         await db
@@ -97,7 +97,7 @@ export const getAchievementsProgress = async () => {
     const stats = await getUserStats();
 
     //@ts-ignore
-    const { quizzesDone, quizzesPassed, quizzesPerfect } = stats[0];
+    const { quizzesDone, quizzesPassed, quizzesPerfect } = stats;
 
     // const resultArray = remainingAchievements.map(item => {
     //   let current;
