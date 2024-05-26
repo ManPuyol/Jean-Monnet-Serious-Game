@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { CircleUser } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +20,6 @@ export default async function Dashboard({
   children: React.ReactNode;
 }) {
   const { nameInitials } = await getProfileInfo();
-
 
   const user = await getUser();
   return (
@@ -46,14 +43,13 @@ export default async function Dashboard({
                 <Link href={'/profile'}>
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                 </Link>
-
+                <Link href={'/study'}>
+                  <DropdownMenuItem>Study</DropdownMenuItem>
+                </Link>
                 {user?.user_metadata.role == 'teacher' && (
                   <>
                     <Link href={'/teach'}>
                       <DropdownMenuItem>Teach</DropdownMenuItem>
-                    </Link>
-                    <Link href={'/study'}>
-                      <DropdownMenuItem>Study</DropdownMenuItem>
                     </Link>
                   </>
                 )}

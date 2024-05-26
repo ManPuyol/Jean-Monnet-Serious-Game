@@ -6,11 +6,7 @@ import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import JSConfetti from 'js-confetti';
 
-export function QuizResults({
-  getScore,
-}: {
-  getScore: Function;
-}) {
+export function QuizResults({ getScore }: { getScore: Function }) {
   const router = useRouter();
   const score = getScore();
 
@@ -61,7 +57,8 @@ export function QuizResults({
         </Button>
         <Button
           onClick={() => {
-            history.back();
+            router.back();
+            router.refresh();
           }}
           variant="secondary"
           className="py-2 px-4"

@@ -59,7 +59,7 @@ export default function QuestionForm({
   setQuestions,
   setActiveQuestion,
   activeQuestion,
-  addNewQuestion
+  addNewQuestion,
 }: {
   unitId: number;
   questions: any[];
@@ -119,11 +119,6 @@ export default function QuestionForm({
       const id = await addQuestionWithAnswers(data);
       toast({
         title: 'Question created successfully',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(id, null, 2)}</code>
-          </pre>
-        ),
       });
       data.id = id;
     } else {
@@ -131,11 +126,6 @@ export default function QuestionForm({
       await updateQuestionWithAnswers(data);
       toast({
         title: 'Question updated successfully',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
       });
     }
 
@@ -200,7 +190,7 @@ export default function QuestionForm({
                       setActiveQuestion(0);
                       toast({
                         title: 'Question deleted successfully',
-                        variant: 'primary'
+                        variant: 'primary',
                       });
                     }}
                   >

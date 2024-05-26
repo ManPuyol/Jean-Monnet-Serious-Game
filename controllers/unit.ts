@@ -51,6 +51,7 @@ export const getActiveUnits = async (subjectId: number, userId: UUID) => {
     with: {
       quizzes: {
         where: (quiz, { eq }) => eq(quiz.userId, userId),
+        orderBy: (quiz, { asc }) => [asc(quiz.id)],
       },
     }
   });
