@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/sign-in', request.url))
   }
 
-  if (request.nextUrl.pathname.startsWith('/teach') && user.user_metadata.role == 'student') {
+  if ((request.nextUrl.pathname.startsWith('/teach') || request.nextUrl.pathname.startsWith('/build')) && user.user_metadata.role == 'student') {
     void updateSession(request)
     return NextResponse.redirect(new URL('/study', request.url))
   }
