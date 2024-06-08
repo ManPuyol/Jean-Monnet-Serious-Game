@@ -12,11 +12,11 @@ import {
 import { useEffect, useState, useTransition } from 'react';
 import { Subject } from '@/schemas/subjects';
 import {
-  allSubjects,
+  allActiveSubjects,
   enrollSubjects,
   getEnrolledSubjects,
 } from '@/controllers/subjects';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { UUID } from 'crypto';
@@ -31,13 +31,13 @@ export default function SubjectSelectionCard({ user }: { user: User }) {
   useEffect(() => {
     startTransition(() => {
       getEnrolledSubjects(user.id as UUID).then(enrolledSubjects => {
-        allSubjects().then(allSubjects => {
-          const selectedSubjects = allSubjects.filter(subject =>
+        allActiveSubjects().then(activeSubjects => {
+          const selectedSubjects = activeSubjects.filter(subject =>
             enrolledSubjects.some(
               enrolledSubject => enrolledSubject.id === subject.id,
             ),
           );
-          setSubjects(allSubjects);
+          setSubjects(activeSubjects);
           setSelectedSubjects(selectedSubjects);
         });
       });
@@ -45,10 +45,11 @@ export default function SubjectSelectionCard({ user }: { user: User }) {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-60px)] p-6">
-      <Card className="h-full">
+    <div className=" flex flex-col flex-1 justify-start items-center h-[calc(100vh-60px)] p-6 ">
+      <Card className="h-full w-full max-w-3xl">
         <CardHeader>
           <CardTitle>Select subject</CardTitle>
+          <CardDescription>Select a subject to enroll and start learning.</CardDescription>
         </CardHeader>
         <CardContent className="h-5/6 pb-0">
           <Command>
