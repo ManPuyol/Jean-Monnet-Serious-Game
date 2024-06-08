@@ -17,8 +17,8 @@ export default function StudyLink() {
   }
 
   return (
-    <Link href="/study">
-      <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+    <Link href="/study" className="md:hidden">
+      <Button variant="outline" size="icon" className="shrink-0">
         <Library className="h-5 w-5" />
       </Button>
     </Link>
