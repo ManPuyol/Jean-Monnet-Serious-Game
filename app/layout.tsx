@@ -13,7 +13,12 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Jean Monnet",
   description: "Jean Monnet serious game for learning European Union history and institutions",
+  manifest: "/manifest.json"
 };
+
+export const viewport = {
+  themeColor: '#fff',
+}
 
 export default function RootLayout({
   children,
@@ -32,7 +37,7 @@ export default function RootLayout({
           {children}
         </main>
         <Toaster />
-        <Sonner expand={true} visibleToasts={9}/>
+        <Sonner position="top-center" expand={true} visibleToasts={9}/>
       </ThemeProvider>
       </body>
     </html>

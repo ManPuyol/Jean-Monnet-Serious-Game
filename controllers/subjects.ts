@@ -3,7 +3,7 @@ import { InsertSubject, Subject, subjects } from "@/schemas/subjects";
 import { db } from "@/utils/drizzle/db";
 
 import { units, userSubjects } from "@/drizzle/schema";
-import { eq, and, notInArray, exists, inArray } from "drizzle-orm";
+import { eq, and, notInArray, asc, inArray } from "drizzle-orm";
 import { UUID } from "crypto";
 import { Unit } from "@/schemas/units";
 
@@ -70,7 +70,8 @@ export const getSubject = async (subjectId: number) => {
       .select()
       .from(subjects)
       .leftJoin(units, eq(subjects.id, units.subjectId))
-      .where(eq(subjects.id, subjectId));
+      .where(eq(subjects.id, subjectId))
+      .orderBy(asc(units.id));
 
     if (!data.length) {
       throw new Error("Subject not found");
@@ -114,7 +115,8 @@ export const getActiveSubjects = async (userId: UUID) => {
       )
     );
 
-  return data;
+    const subjectList = data.map((item) => item.subjects);
+    return subjectList;
 }
 
 export const getNotEnrolledSubjects = async (userId: UUID) => {
