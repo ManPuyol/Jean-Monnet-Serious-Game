@@ -1,4 +1,4 @@
-import { getSubjects } from '@/controllers/subjects';
+import { getActiveSubjects } from '@/controllers/subjects';
 import { Enroll } from '@/app/(main)/study/[id]/enroll';
 import SubjectNavigation from './SubjectNavigation';
 import { Subject } from '@/schemas/subjects'; // Import the Subject type
@@ -14,7 +14,7 @@ export default async function StudentSidebar() {
 
   if (!user?.id) return redirect('/sign-in');
 
-  const subjects: Subject[] = await getSubjects(user.id as UUID); // Specify the type of the subjects variable
+  const subjects: Subject[] = await getActiveSubjects(user.id as UUID); // Specify the type of the subjects variable
   return (
     <div className="flex-1 md:border-r pt-2">
       <div className="py-2">
