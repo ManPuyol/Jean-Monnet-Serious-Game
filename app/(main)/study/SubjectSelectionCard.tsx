@@ -49,7 +49,7 @@ export default function SubjectSelectionCard({ user }: { user: User }) {
       <Card className="h-full w-full max-w-3xl">
         <CardHeader>
           <CardTitle>Select subject</CardTitle>
-          <CardDescription>Select a subject to enroll and start learning.</CardDescription>
+          <CardDescription>Select a subject to enroll and start learning. Already enrolled subjects will have a check mark.</CardDescription>
         </CardHeader>
         <CardContent className="h-5/6 pb-0">
           <Command>

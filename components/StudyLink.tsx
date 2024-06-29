@@ -10,6 +10,7 @@ export default function StudyLink() {
 
   if (
     path === '/study' ||
+    path.startsWith('/quiz') ||
     path.startsWith('/teach') ||
     path.startsWith('/build')
   ) {
