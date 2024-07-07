@@ -39,34 +39,34 @@ Esta aplicación es una herramienta pedagógica para la gamificación de cursos,
 Instrucciones paso a paso para configurar el proyecto localmente.
 
 1. Clonar el repositorio:
-   \`\`\`sh
+   ```sh
    git clone https://github.com/ManPuyol/Jean-Monet-Serious-Game
-   \`\`\`
+   ```
 2. Navegar al directorio del proyecto:
-   \`\`\`sh
+   ```sh
    cd tu_repositorio
-   \`\`\`
+   ```
 3. Instalar dependencias:
-   \`\`\`sh
+   ```sh
    npm install
-   \`\`\`
+   ```
 4. Configurar las variables de entorno:
    - Crear un archivo \`.env\` en la raíz del proyecto.
    - Añadir las siguientes variables de entorno (modifica según tus necesidades):
-     \`\`\`env
+     ```env
      DATABASE_URL= url_otorgada_por_Supabase
      NEXT_PUBLIC_SUPABASE_URL= tu_url_de_supabase
      NEXT_PUBLIC_SUPABASE_ANON_KEY= tu_anon_key
-     \`\`\`
+     ```
 
 ## Uso
 
 Instrucciones sobre cómo ejecutar la aplicación localmente.
 
 1. Iniciar el servidor de desarrollo:
-   \`\`\`sh
+   ```sh
    npm run dev
-   \`\`\`
+   ```
 2. Abrir [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación.
 
 ## Despliegue
@@ -81,11 +81,11 @@ Instrucciones para desplegar la aplicación en producción.
 <br>
 
 2. Hacer push de los cambios a la rama principal:
-   \`\`\`sh
+   ```sh
    git add .
    git commit -m "Cambios realizados"
    git push origin main
-   \`\`\`
+   ```
 
 Vercel desplegará automáticamente la aplicación con cada push a la rama principal.
 
@@ -94,8 +94,17 @@ Vercel desplegará automáticamente la aplicación con cada push a la rama princ
 Instrucciones para contribuir al proyecto.
 
 1. Hacer un fork del proyecto.
-2. Crear una nueva rama (\`git checkout -b feature/nueva-funcionalidad\`).
-3. Realizar los cambios necesarios y hacer commit (\`git commit -m "Añadir nueva funcionalidad"\`).
-4. Hacer push a la rama (\`git push origin feature/nueva-funcionalidad\`).
+2. Crear una nueva rama 
+```sh
+git checkout -b feature/nueva-funcionalidad
+```
+3. Realizar los cambios necesarios y hacer commit 
+```sh
+git commit -m "Añadir nueva funcionalidad"
+```
+4. Hacer push a la rama
+``` sh
+git push origin feature/nueva-funcionalidad
+```
 5. Abrir un Pull Request.
 
